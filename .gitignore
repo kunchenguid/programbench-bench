@@ -1,0 +1,24 @@
+# Run outputs (per-task submissions, eval results, transcripts)
+runs/
+logs/
+
+# Cache (pulled cleanroom images, downloaded test blobs, ProgramBench python venv)
+cache/
+.venv/
+__pycache__/
+*.pyc
+
+# Local OAuth token for sandbox-mode auth (gitignored — never commit).
+.claude-oauth-token
+.claude/scheduled_tasks.lock
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Keep the directory placeholders so the repo structure is obvious to cloners
+!runs/.gitkeep
+!logs/.gitkeep
+!cache/.gitkeep

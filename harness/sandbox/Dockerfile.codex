@@ -1,0 +1,49 @@
+# Linux x86_64 container that runs OpenAI Codex CLI against a host-side
+# cleanroom. Parallel of Dockerfile.agent but installs @openai/codex instead
+# of @anthropic-ai/claude-code. Network access is restricted at runtime
+# (--internal network + HTTPS_PROXY pointing at the whitelist proxy). Auth is
+# via a bind-mounted ~/.codex/auth.json (ChatGPT OAuth mode).
+FROM --platform=linux/amd64 node:20-slim
+
+# docker CLI to drive the cleanroom (talks to host docker.sock mounted at run
+# time). Plus python3 for parity with Dockerfile.agent, jq for transcript
+# inspection, tar/git for local source tree management.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        git \
+        jq \
+        python3 \
+        tar \
+        gnupg \
+        lsb-release \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://download.docker.com/linux/debian/gpg \
+         | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && chmod a+r /etc/apt/keyrings/docker.gpg \
+    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
+         > /etc/apt/sources.list.d/docker.list \
+    && apt-get update && apt-get install -y --no-install-recommends docker-ce-cli \
+    && apt-get purge -y curl gnupg lsb-release \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Codex CLI from npm. Pin the version via CODEX_CLI_VERSION build arg
+# for full reproducibility; default matches the version validated on the host
+# (0.130.0 as of 2026-05-17).
+ARG CODEX_CLI_VERSION=0.130.0
+RUN npm install -g @openai/codex@${CODEX_CLI_VERSION} \
+    && codex --version
+
+# Codex CLI doesn't impose the "no root" restriction Claude Code does, but
+# parallelism with the Claude arm matters: drop to `node` (UID 1000) so
+# bind-mount ownership semantics on macOS Docker Desktop line up. The
+# entrypoint will fix /var/run/docker.sock perms first, then re-exec as node.
+RUN getent passwd node >/dev/null || useradd -m -u 1000 -s /bin/bash node
+
+# Codex reads auth + config from $CODEX_HOME (defaults to $HOME/.codex). We
+# bind-mount the host's ~/.codex/auth.json read-only at runtime into the
+# node user's home; this env var pin makes the path explicit.
+ENV CODEX_HOME=/home/node/.codex
+
+WORKDIR /pb
+ENTRYPOINT ["/pb/harness/sandbox/entrypoint-codex.sh"]

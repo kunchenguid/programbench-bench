@@ -1,0 +1,21 @@
+# Anthropic API host. Anchored regex.
+^api\.anthropic\.com$
+# Statsig SDK is used by Claude Code for feature flags. Allow it so the CLI
+# doesn't time out on startup; it's not a data exfiltration vector.
+^featuregates\.org$
+^api\.statsig\.com$
+# --- Codex CLI (codex-vanilla arm) ---
+# OpenAI public API endpoint (api-key-mode users; harmless to allow for
+# ChatGPT-mode too since some Codex code paths probe it).
+^api\.openai\.com$
+# ChatGPT OAuth token endpoint. Codex's ChatGPT-mode credentials in
+# ~/.codex/auth.json refresh against this host.
+^auth\.openai\.com$
+# ChatGPT-mode Codex inference backend. Strings extracted from the Codex
+# binary show requests to https://chatgpt.com/backend-api/codex. Whitelist
+# the apex host; tinyproxy filter matches on the Host header only.
+^chatgpt\.com$
+# A/B experimentation endpoint used by Codex for feature-flag fetches at
+# startup. Allowed for the same reason as featuregates.org for Claude: avoids
+# CLI startup timeouts, no data exfil vector.
+^ab\.chatgpt\.com$

@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__PB_REPO__/harness/hooks/bash-network-deny.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+# Linux x86_64 container that runs `claude -p` against a host-side cleanroom.
+# Network access is restricted at runtime (--internal network + HTTPS_PROXY
+# pointing at the whitelist proxy). Auth is via CLAUDE_CODE_OAUTH_TOKEN env var.
+FROM --platform=linux/amd64 node:20-slim
+
+# docker CLI to drive the cleanroom (talks to host docker.sock mounted at run
+# time). Plus python3 for the network-deny hook, jq for transcript inspection,
+# tar/git for local source tree management.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        git \
+        jq \
+        python3 \
+        tar \
+        gnupg \
+        lsb-release \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://download.docker.com/linux/debian/gpg \
+         | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && chmod a+r /etc/apt/keyrings/docker.gpg \
+    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
+         > /etc/apt/sources.list.d/docker.list \
+    && apt-get update && apt-get install -y --no-install-recommends docker-ce-cli \
+    && apt-get purge -y curl gnupg lsb-release \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Claude Code from npm. Pin the version via CLAUDE_CODE_VERSION build
+# arg for full reproducibility; default is "latest".
+ARG CLAUDE_CODE_VERSION=latest
+RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} \
+    && claude --version
+
+# Claude Code refuses --permission-mode bypassPermissions when running as
+# root. node:20-slim ships a `node` user (UID 1000); the entrypoint drops to
+# it. UID 1000 matches Docker Desktop's typical bind-mount translation on
+# macOS so /pb file access works without ownership headaches.
+RUN getent passwd node >/dev/null || useradd -m -u 1000 -s /bin/bash node
+
+WORKDIR /pb
+ENTRYPOINT ["/pb/harness/sandbox/entrypoint.sh"]
