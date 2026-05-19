@@ -2,6 +2,9 @@
 runs/
 logs/
 
+# Local recovery backups (pre-rerun eval JSONs, de-pollution originals) - multi-GB, never committed
+backups/
+
 # Cache (pulled cleanroom images, downloaded test blobs, ProgramBench python venv)
 cache/
 .venv/

@@ -49,12 +49,21 @@ RUN_CWD="$(mktemp -d -t pb-run-XXXX)"
 mkdir -p "$LOG_OUT"
 
 # --- Apply arm to run cwd ---
-# Codex CLI doesn't have a "skills" concept the way Claude Code does. If the
-# arm ships a skills/ dir we still copy it for parity (an arm could reference
-# the files in its orchestration.md), but there is no auto-loading.
+# Codex DOES auto-load skills: it scans $CODEX_HOME/skills/<name>/SKILL.md and
+# surfaces each skill's `description` frontmatter to the model (skills are on
+# by default; see the system skill-installer skill). So if the arm ships a
+# skills/ dir, install each skill into $CODEX_HOME/skills so `codex exec`
+# discovers it. This is how the codex-free-tdd arm injects the superpowers
+# test-driven-development skill as its SINGLE experimental variable - the arm's
+# orchestration.md + setup.sh stay byte-identical to codex-free. (The earlier
+# comment here claimed codex had no skills concept; that was stale - corrected
+# 2026-06-04. NB: the npx-skills .skill-lock.json and agents/openai.yaml are
+# NOT needed; a codex skill is just a folder with SKILL.md + referenced files.)
 if [[ -d "$ARM_DIR/skills" ]]; then
-  mkdir -p "$RUN_CWD/.codex/skills"
-  cp -r "$ARM_DIR/skills/." "$RUN_CWD/.codex/skills/"
+  CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
+  mkdir -p "$CODEX_SKILLS_DIR"
+  cp -r "$ARM_DIR/skills/." "$CODEX_SKILLS_DIR/"
+  echo "[entrypoint-codex] installed arm skills into $CODEX_SKILLS_DIR: $(ls "$CODEX_SKILLS_DIR" 2>/dev/null | tr '\n' ' ')"
 fi
 
 # Combine the harness system prompt and the arm's orchestration into a single

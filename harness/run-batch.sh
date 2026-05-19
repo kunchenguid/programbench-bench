@@ -32,7 +32,7 @@ TASKS_RAW=""
 SLICE=""
 FILTER=""
 RUN_NAME="${PB_RUN_NAME:-default}"
-PARALLEL=1
+PARALLEL=4   # default agent concurrency (2026-05-26); REQUIRES `docker login` (200/6hr) to avoid 429 pull-cascade false-failures. Override with --parallel 1 for anonymous/quota-limited runs.
 BUDGET="${PB_BUDGET_USD:-50}"
 MODEL="${PB_MODEL:-}"   # empty → let per-arm runner pick its own default (claude-* defaults to claude-opus-4-7, codex-* defaults to gpt-5.5)
 KEEP_IMAGE_FLAG=""
@@ -105,6 +105,10 @@ is_excluded() {
 
 ALL_TASKS=()
 while IFS= read -r line; do ALL_TASKS+=("$line"); done < <(ls "$TASKS_DIR" | sort)
+# PB_200_FIX: pre-exclude fixtures BEFORE slicing so --slice indexes the real-task
+# list (codex-pilot-2 wants exactly 200, not 201 incl. the testorg scaffold).
+_pb200=(); for _t in "${ALL_TASKS[@]}"; do is_excluded "$_t" || _pb200+=("$_t"); done
+ALL_TASKS=("${_pb200[@]}")
 
 # Apply selector
 TASKS=()

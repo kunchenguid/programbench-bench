@@ -1,0 +1,42 @@
+# Per-language cleanroom: C arm.
+#
+# Toolchain: gcc/g++/make/cmake/pkg-config plus the -dev variants of the
+# runtime libs we already baked into the base image. Headers ARE the C
+# "deps" - no separate volume needed.
+#
+# Mandate: only the C toolchain is installed. No rustc, no go, no python3,
+# no node. The agent can verify with `which gcc rustc python3 go node` and
+# only the first will resolve.
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        gcc \
+        g++ \
+        make \
+        cmake \
+        pkg-config \
+        binutils \
+        libc6-dev \
+        libncurses-dev \
+        libncursesw5-dev \
+        libtinfo-dev \
+        libssl-dev \
+        libsqlite3-dev \
+        libreadline-dev \
+        libgmp-dev \
+        libusb-1.0-0-dev \
+        libasound2-dev \
+        libpcre2-dev \
+        zlib1g-dev \
+        libzstd-dev \
+        liblz4-dev \
+        libbz2-dev \
+        libxml2-dev \
+        libcurl4-openssl-dev \
+        libffi-dev \
+        uuid-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*

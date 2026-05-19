@@ -1,0 +1,49 @@
+# Per-language cleanroom: TypeScript arm.
+#
+# Toolchain: Node.js LTS + npm + typescript (tsc) + ts-node (for ad-hoc
+# script execution). Per the experiment's strict JS-vs-TS A/B:
+#   - The agent MUST author .ts source.
+#   - The agent MUST compile via tsc before running (no direct node .ts).
+#   - The submission's entry point is the compiled .js (post-tsc) OR a
+#     ts-node-driven runner that the orchestration prompt explicitly
+#     calls out.
+#
+# Deps: separate `pb-deps-ts` volume so the TS top-100 (which includes
+# typescript, @types/node, common @types/* packages, ts-runtime libs)
+# is tracked independently from pb-deps-js.
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ARG NODE_MAJOR=20
+RUN set -eux; \
+    apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+        | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" \
+        > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install -y --no-install-recommends nodejs
+
+# Install typescript + ts-node globally so `tsc` and `ts-node` are on PATH
+# without a per-project install. Versions pinned for repro.
+ARG TYPESCRIPT_VERSION=5.5.4
+ARG TS_NODE_VERSION=10.9.2
+RUN npm install -g typescript@${TYPESCRIPT_VERSION} ts-node@${TS_NODE_VERSION} \
+    && tsc --version && ts-node --version \
+    && apt-get purge -y curl gnupg \
+    && apt-get autoremove -y \
+    # Remove user-callable python3 entrypoints so the agent cannot shell
+    # out to python from the TS arm. Direct binary removal avoids the
+    # apt-purge cascade that would also drop nodejs (nodesource's nodejs
+    # Depends: python3).
+    && rm -f /usr/bin/python3 /usr/bin/python3.11 /usr/local/bin/python3 /usr/local/bin/python \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && node --version && npm --version && tsc --version
+
+ENV NPM_CONFIG_OFFLINE=true \
+    NPM_CONFIG_CACHE=/opt/deps/ts/cache \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false \
+    NPM_CONFIG_PROGRESS=false

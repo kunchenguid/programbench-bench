@@ -1,0 +1,89 @@
+# Shared base for the per-language cleanroom images used by the
+# per-language-evaluation experiment (plans/per-language-evaluation.md).
+#
+# Topology recap: the agent container (Dockerfile.codex) still drives the
+# cleanroom via `docker exec`. The cleanroom is what we vary per arm. For
+# `codex-lang-<X>` arms, the cleanroom is FROM pb/clean-lang-<X>, which
+# itself is FROM this base. At task start the runner overlays /workspace
+# contents (executable, README, fixtures) from the canonical upstream
+# `programbench/<task>:task_cleanroom` image.
+#
+# Goals for this base:
+#   - Match the upstream `agent` user (UID 1000, GID 1000, /home/agent,
+#     /bin/bash) so file ownership lines up after `docker cp /workspace/.`
+#   - Install a runtime-lib superset broad enough that the upstream
+#     `executable` binary's shared-lib needs are satisfied for the vast
+#     majority of programbench tasks. ldd on a few cleanrooms suggests
+#     ncurses/tinfo/ssl/sqlite/readline/gmp/usb/asound/pcre/zlib/zstd are
+#     the common needs; we install the broad superset eagerly.
+#   - Carry tar/git/jq/ca-certificates for the agent's own bookkeeping.
+#
+# Language toolchains and per-language deps mounts are layered on top by
+# `Dockerfile.clean-lang-{c,rust,python,...}`.
+
+FROM --platform=linux/amd64 debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8
+
+# Runtime libraries: superset chosen to cover the shared-lib needs of
+# programbench's CLI-shaped reference binaries (TUIs, parsers, compression
+# tools, simple network clients, math tools). Headers / -dev variants are
+# installed only in the per-language images that need them.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        bash \
+        coreutils \
+        findutils \
+        grep \
+        sed \
+        gawk \
+        less \
+        file \
+        git \
+        jq \
+        tar \
+        xz-utils \
+        gzip \
+        bzip2 \
+        zstd \
+        procps \
+        libncurses6 \
+        libncursesw6 \
+        libtinfo6 \
+        libssl3 \
+        libsqlite3-0 \
+        libreadline8 \
+        libgmp10 \
+        libusb-1.0-0 \
+        libasound2 \
+        libpcre2-8-0 \
+        zlib1g \
+        libzstd1 \
+        liblz4-1 \
+        libbz2-1.0 \
+        libxml2 \
+        libcurl4 \
+        libffi8 \
+        libuuid1 \
+        libstdc++6 \
+        libgcc-s1 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Match upstream cleanroom's agent user exactly: uid=1000(agent)
+# gid=1000(agent) home=/home/agent shell=/bin/bash. The runner uses
+# `docker cp` to overlay /workspace contents, so the uid/gid must line up
+# or files will appear unowned to the agent.
+RUN groupadd --gid 1000 agent \
+    && useradd --uid 1000 --gid 1000 --home-dir /home/agent \
+                --create-home --shell /bin/bash agent
+
+# Deps volume mount point. Per-language runner mounts a named docker
+# volume here read-only; per-language images set the env vars that point
+# their package manager at the appropriate subdir.
+RUN mkdir -p /opt/deps && chown root:root /opt/deps && chmod 755 /opt/deps
+
+WORKDIR /workspace
+CMD ["/bin/bash"]

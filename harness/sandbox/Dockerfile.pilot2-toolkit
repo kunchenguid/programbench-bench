@@ -1,0 +1,85 @@
+# codex-pilot-2 toolkit builder.
+#
+# Builds the Ubuntu-22.04-NATIVE toolchains that the `:task` eval image does
+# NOT ship natively (node/ts, JDK+maven, ruby). The `:task` base already has
+# gcc/rust/go/python3.10/perl, so those four languages need NOTHING here.
+#
+# Critical contrast with the pilot-1 pb-all-langs-toolkit (Dockerfile.all-langs-toolkit):
+# that was debian:12 and its binaries+libs SEGFAULT on the Ubuntu 22.04 `:task`
+# image (glibc 2.36 vs 2.35). Everything here is built/installed on ubuntu:22.04
+# so it runs from a read-only mounted volume on `:task` with PATH/JAVA_HOME only
+# (no dpkg, no glibc poisoning).
+#
+# Layout (lands at /opt/tk2 in both cleanroom and eval):
+#   /opt/tk2/node/   node 20 + global typescript/ts-node (bin/{node,npm,npx,tsc,ts-node})
+#   /opt/tk2/jdk/    Temurin JDK 17 (JAVA_HOME)
+#   /opt/tk2/maven/  Maven 3.9
+#   /opt/tk2/ruby/   ruby 3.1 built --enable-shared --prefix=/opt/tk2/ruby (+ bundler/rake)
+#                    lib/ holds libruby.so* and a copied libyaml.so* (narrow LD path)
+#
+# Build:   docker build --platform linux/amd64 -t pb/pilot2-toolkit:builder \
+#            -f harness/sandbox/Dockerfile.pilot2-toolkit harness/sandbox
+# Populate: harness/populate-pilot2-toolkit.sh   (copies /opt/tk2 -> volume pb-toolkit2)
+
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates curl xz-utils tar \
+        build-essential autoconf bison \
+        libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses-dev \
+        libyaml-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt/tk2
+
+# --- Node 20 LTS (official self-contained tarball) + TypeScript + ts-node ---
+ARG NODE_VERSION=20.18.1
+ARG TS_VERSION=5.5.4
+ARG TS_NODE_VERSION=10.9.2
+RUN set -eux; \
+    curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz; \
+    mkdir -p /opt/tk2/node; \
+    tar -xJf /tmp/node.tar.xz -C /opt/tk2/node --strip-components=1; \
+    rm /tmp/node.tar.xz; \
+    export PATH=/opt/tk2/node/bin:$PATH; \
+    npm install -g --prefix /opt/tk2/node \
+        typescript@${TS_VERSION} ts-node@${TS_NODE_VERSION}; \
+    node --version; tsc --version; ts-node --version
+
+# --- Temurin JDK 17 (self-contained) + Maven 3.9 ---
+ARG JDK_TARBALL=https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.13%2B11/OpenJDK17U-jdk_x64_linux_hotspot_17.0.13_11.tar.gz
+ARG MAVEN_VERSION=3.9.9
+RUN set -eux; \
+    curl -fsSL "${JDK_TARBALL}" -o /tmp/jdk.tar.gz; \
+    mkdir -p /opt/tk2/jdk; \
+    tar -xzf /tmp/jdk.tar.gz -C /opt/tk2/jdk --strip-components=1; \
+    rm /tmp/jdk.tar.gz; \
+    /opt/tk2/jdk/bin/java -version; \
+    curl -fsSL "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" -o /tmp/mvn.tar.gz; \
+    mkdir -p /opt/tk2/maven; \
+    tar -xzf /tmp/mvn.tar.gz -C /opt/tk2/maven --strip-components=1; \
+    rm /tmp/mvn.tar.gz; \
+    JAVA_HOME=/opt/tk2/jdk /opt/tk2/maven/bin/mvn --version
+
+# --- Ruby 3.1 from source (--enable-shared, prefix=/opt/tk2/ruby) ---
+# Built on ubuntu:22.04 so libruby.so links the same glibc as the eval image.
+# The gem API dir is 3.1.0 (matches the pb-deps-ruby vendored tree's path).
+ARG RUBY_VERSION=3.1.6
+RUN set -eux; \
+    curl -fsSL "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-${RUBY_VERSION}.tar.gz" -o /tmp/ruby.tar.gz; \
+    mkdir -p /tmp/ruby-src; \
+    tar -xzf /tmp/ruby.tar.gz -C /tmp/ruby-src --strip-components=1; \
+    cd /tmp/ruby-src; \
+    ./configure --prefix=/opt/tk2/ruby --enable-shared --disable-install-doc; \
+    make -j"$(nproc)"; \
+    make install; \
+    cd /; rm -rf /tmp/ruby-src /tmp/ruby.tar.gz; \
+    # Copy libyaml so psych/`require "yaml"` resolves via the ruby-only LD dir.
+    cp -a /usr/lib/x86_64-linux-gnu/libyaml-0.so* /opt/tk2/ruby/lib/ 2>/dev/null || true; \
+    LD_LIBRARY_PATH=/opt/tk2/ruby/lib /opt/tk2/ruby/bin/ruby --version; \
+    LD_LIBRARY_PATH=/opt/tk2/ruby/lib /opt/tk2/ruby/bin/ruby -e 'require "yaml"; puts "yaml ok"'; \
+    LD_LIBRARY_PATH=/opt/tk2/ruby/lib /opt/tk2/ruby/bin/gem install --no-document bundler rake; \
+    LD_LIBRARY_PATH=/opt/tk2/ruby/lib /opt/tk2/ruby/bin/ruby -e 'require "json"; require "openssl"; require "zlib"; puts "stdlib ok"'
+
+RUN chmod -R a+rX /opt/tk2 && du -sh /opt/tk2/*

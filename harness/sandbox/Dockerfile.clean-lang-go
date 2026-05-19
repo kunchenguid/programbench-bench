@@ -1,0 +1,37 @@
+# Per-language cleanroom: Go arm.
+#
+# Toolchain: official Go install at /usr/local/go (mirrors upstream
+# cleanroom layout). Plus gcc as cgo's C compiler.
+#
+# Deps: per-arm read-only volume `pb-deps-go` mounted at /opt/deps/go.
+# Populated by `harness/build-deps-volume-go.sh`. GOMODCACHE points at
+# /opt/deps/go/pkg/mod and GOPROXY=off means `go build` resolves only
+# what's in the local cache (the cleanroom is --network none anyway).
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        gcc \
+        libc6-dev \
+        binutils \
+        pkg-config \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG GO_VERSION=1.22.5
+RUN set -eux; \
+    apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o /tmp/go.tar.gz \
+    && tar -C /usr/local -xzf /tmp/go.tar.gz \
+    && rm /tmp/go.tar.gz \
+    && apt-get purge -y curl && apt-get autoremove -y \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && /usr/local/go/bin/go version
+
+ENV PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GOMODCACHE=/opt/deps/go/pkg/mod \
+    GOPROXY=off \
+    GOFLAGS=-mod=mod \
+    CGO_ENABLED=1

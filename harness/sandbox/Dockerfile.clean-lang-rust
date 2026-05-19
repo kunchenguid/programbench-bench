@@ -1,0 +1,67 @@
+# Per-language cleanroom: Rust arm.
+#
+# Toolchain: rustup-installed stable rust, placed at /usr/local/cargo +
+# /usr/local/rustup to mirror upstream cleanroom layout. Plus the C
+# linker + a few -dev libs that rust crates with C deps reach for during
+# `cargo build` (openssl-sys, libgit2-sys, etc. - common transitively).
+#
+# Deps: per-arm read-only volume `pb-deps-rust` mounted at /opt/deps/rust
+# at task start. Populated by `harness/build-deps-volume-rust.sh` using
+# `cargo vendor`. A baked-in /etc/cargo/config.toml redirects
+# [source.crates-io] at the vendored dir so `cargo build` in any
+# subdirectory resolves crates offline.
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Linker + dev headers commonly required by rust crates with C deps.
+# Keep this list short; the runtime libs are already in the base.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        gcc \
+        libc6-dev \
+        binutils \
+        pkg-config \
+        libssl-dev \
+        libssh2-1-dev \
+        libgit2-dev \
+        zlib1g-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Install rustup + stable toolchain. We pin RUSTUP_VERSION for repro; the
+# resulting rust version is whatever stable is at install time (recorded
+# in the build log).
+ARG RUSTUP_VERSION=1.27.1
+RUN set -eux; \
+    apt-get update && apt-get install -y --no-install-recommends curl \
+    && rustArch='x86_64-unknown-linux-gnu' \
+    && url="https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/${rustArch}/rustup-init" \
+    && curl -fsSL "$url" -o /tmp/rustup-init \
+    && chmod +x /tmp/rustup-init \
+    && /tmp/rustup-init -y --no-modify-path --profile minimal --default-toolchain stable \
+    && rm /tmp/rustup-init \
+    && chmod -R a+w "$RUSTUP_HOME" "$CARGO_HOME" \
+    && apt-get purge -y curl && apt-get autoremove -y \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && rustc --version && cargo --version
+
+# Cargo offline config: redirect crates.io to the vendored dir under the
+# mounted deps volume. The vendor dir name must match what
+# `cargo vendor` produces in the build script. /etc/cargo/config.toml is
+# a non-standard location; cargo looks at $CARGO_HOME/config.toml. We
+# install there.
+RUN mkdir -p /usr/local/cargo && cat > /usr/local/cargo/config.toml <<'EOF'
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "/opt/deps/rust/vendor"
+
+[net]
+offline = true
+EOF

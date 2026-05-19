@@ -1,0 +1,158 @@
+# programbench-bench report  (run: codex-pilot-1)
+
+## Per-arm summary
+
+arm                     n   mean%  median%  compile%  any_pass%   ≥25%   ≥50%   ≥80%   ≥95%   =100%  $/task  turns    min  skills%
+----------------------------------------------------------------------------------------------------------------------------------
+codex-vanilla-clean   200    48.2     52.6      99.0       97.0   80.5   52.5    6.0    0.5     0.0   $1.11     40    4.3      0.0
+codex-vanilla         200    52.2     57.7     100.0       99.0   86.0   60.0    8.5    0.5     0.0   $1.03     37    4.4      0.0
+codex-lang-c          200    43.3     43.3     100.0       99.5   75.5   41.5    4.5    0.5     0.0   $1.37     38    5.6      0.0
+codex-lang-go         200    44.5     47.9      99.0       97.0   74.5   44.0    4.5    0.5     0.0   $1.63     42    6.8      0.0
+codex-lang-java       200    40.6     41.2      93.5       91.5   68.0   41.0    7.0    0.0     0.0   $2.17     48    7.9      0.0
+codex-lang-js         200    38.3     36.9     100.0       98.0   65.5   36.0    4.0    0.0     0.0   $1.16     39    4.6      0.0
+codex-lang-python     200    39.8     41.5      98.5       96.0   68.0   37.0    4.0    1.0     0.0   $1.26     36    4.9      0.0
+codex-lang-ruby       200    37.7     34.6     100.0       95.5   63.5   34.5    3.0    0.0     0.0   $1.38     39    5.5      0.0
+codex-lang-rust       200    45.8     47.3      99.5       98.5   79.0   46.0    5.0    0.5     0.0   $1.96     45    7.3      0.0
+codex-lang-ts         200    39.1     37.8      98.5       97.0   68.5   37.0    5.5    0.5     0.0   $1.42     42    5.3      0.0
+
+## Score distribution (threshold ladder)
+
+score bucket   codex-vanilla-clean             codex-vanilla                   codex-lang-c                    codex-lang-go                   codex-lang-java                 codex-lang-js                   codex-lang-python               codex-lang-ruby                 codex-lang-rust                 codex-lang-ts                 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    0          ██                          6  █                           2                              1  ██                          6  █████                      17  █                           4  ██                          8  ███                         9  █                           3  ██                          6
+  1-24         ██████████                 33  ████████                   26  ██████████████             48  █████████████              45  ██████████████             47  ███████████████████        65  ████████████████           56  ███████████████████        64  ███████████                39  █████████████████          57
+ 25-49         ████████████████           56  ███████████████            52  ████████████████████       68  ██████████████████         61  ████████████████           54  █████████████████          59  ██████████████████         62  █████████████████          58  ███████████████████        66  ██████████████████         63
+ 50-79         ███████████████████████████  93  ██████████████████████████████ 103  ██████████████████████     74  ███████████████████████    79  ████████████████████       68  ███████████████████        64  ███████████████████        66  ██████████████████         63  ████████████████████████   82  ██████████████████         63
+ 80-94         ███                        11  █████                      16  ██                          8  ██                          8  ████                       14  ██                          8  ██                          6  ██                          6  ███                         9  ███                        10
+ 95-99                                     1                              1                              1                              1                              0                              0  █                           2                              0                              1                              1
+   100                                     0                              0                              0                              0                              0                              0                              0                              0                              0                              0
+
+## Paired comparisons
+
+=== codex-vanilla vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     +4.08  95% CI [+2.13, +6.11]   wilcoxon p=0.0000
+  Δ median %   +1.30
+  wins / losses / ties: 120 / 75 / 5
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        0        2       +2   0.5000
+  any_pass       0        4       +4   0.1250
+  ≥25            4       15      +11   0.0192
+  ≥50           10       25      +15   0.0180
+  ≥80            2        7       +5   0.1797
+  ≥95            0        0       +0   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-c vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -4.87  95% CI [-7.61, -2.19]   wilcoxon p=0.0000
+  Δ median %   -3.03
+  wins / losses / ties: 68 / 130 / 2
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        0        2       +2   0.5000
+  any_pass       0        5       +5   0.0625
+  ≥25           21       11      -10   0.1116
+  ≥50           38       16      -22   0.0043
+  ≥80            7        4       -3   0.5488
+  ≥95            0        0       +0   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-go vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -3.67  95% CI [-6.52, -0.80]   wilcoxon p=0.0075
+  Δ median %   -1.50
+  wins / losses / ties: 78 / 117 / 5
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        2        2       +0   1.0000
+  any_pass       3        3       +0   1.0000
+  ≥25           24       12      -12   0.0668
+  ≥50           37       20      -17   0.0341
+  ≥80            5        2       -3   0.4531
+  ≥95            0        0       +0   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-java vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -7.61  95% CI [-10.14, -5.20]   wilcoxon p=0.0000
+  Δ median %   -3.20
+  wins / losses / ties: 55 / 139 / 6
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile       11        0      -11   0.0010
+  any_pass      11        0      -11   0.0010
+  ≥25           29        4      -25   0.0000
+  ≥50           33       10      -23   0.0008
+  ≥80            4        6       +2   0.7539
+  ≥95            1        0       -1   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-js vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -9.81  95% CI [-12.83, -6.92]   wilcoxon p=0.0000
+  Δ median %   -4.74
+  wins / losses / ties: 60 / 137 / 3
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        0        2       +2   0.5000
+  any_pass       1        3       +2   0.6250
+  ≥25           38        8      -30   0.0000
+  ≥50           46       13      -33   0.0000
+  ≥80            6        2       -4   0.2891
+  ≥95            1        0       -1   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-python vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -8.32  95% CI [-11.18, -5.49]   wilcoxon p=0.0000
+  Δ median %   -3.36
+  wins / losses / ties: 60 / 136 / 4
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        3        2       -1   1.0000
+  any_pass       4        2       -2   0.6875
+  ≥25           34        9      -25   0.0003
+  ≥50           41       10      -31   0.0000
+  ≥80            7        3       -4   0.3438
+  ≥95            0        1       +1   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-ruby vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -10.49  95% CI [-13.69, -7.29]   wilcoxon p=0.0000
+  Δ median %   -5.18
+  wins / losses / ties: 59 / 138 / 3
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        0        2       +2   0.5000
+  any_pass       6        3       -3   0.5078
+  ≥25           42        8      -34   0.0000
+  ≥50           49       13      -36   0.0000
+  ≥80            8        2       -6   0.1094
+  ≥95            1        0       -1   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-rust vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -2.40  95% CI [-4.62, -0.22]   wilcoxon p=0.0052
+  Δ median %   -1.22
+  wins / losses / ties: 80 / 116 / 4
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        1        2       +1   1.0000
+  any_pass       1        4       +3   0.3750
+  ≥25           13       10       -3   0.6776
+  ≥50           27       14      -13   0.0609
+  ≥80            4        2       -2   0.6875
+  ≥95            0        0       +0   1.0000
+  =100           0        0       +0   1.0000
+
+=== codex-lang-ts vs codex-vanilla-clean  (paired on 200 tasks) ===
+  Δ mean %     -9.02  95% CI [-12.19, -6.00]   wilcoxon p=0.0000
+  Δ median %   -5.17
+  wins / losses / ties: 60 / 136 / 4
+
+  bucket    a_only   b_only   Δcount   mcnemar p
+  compile        3        2       -1   1.0000
+  any_pass       3        3       +0   1.0000
+  ≥25           33        9      -24   0.0004
+  ≥50           46       15      -31   0.0001
+  ≥80            5        4       -1   1.0000
+  ≥95            0        0       +0   1.0000
+  =100           0        0       +0   1.0000
+
+(per-task CSV: runs/codex-pilot-1/per-task.csv)

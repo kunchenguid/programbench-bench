@@ -1,0 +1,92 @@
+# Single image carrying all 8 language toolchains, used as the source for
+# the read-only `pb-all-langs-toolkit` docker volume. The volume is mounted
+# at /opt/all-langs in programbench's eval containers via a small
+# monkey-patch of `programbench.constants.DOCKER_RUN_ARGS`.
+#
+# Two purposes:
+#   1. Provide a `/usr` tree mountable at /opt/all-langs/ that can be added
+#      to PATH (used by Go + the agent's compile.sh prelude).
+#   2. Stage .deb files for nodejs/ruby/openjdk/maven under
+#      /opt/all-langs/debs/ so the agent's compile.sh can `dpkg -i` them
+#      to install missing toolchains natively into the eval container.
+#
+# Multi-stage so we can apt-get install --download-only against a clean
+# base (which actually downloads the .debs) BEFORE any installs that
+# would mark packages as already-installed and skip re-download.
+
+# ---- stage 1: .deb staging ------------------------------------------------
+FROM debian:12-slim AS deb-stage
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates curl gnupg
+# nodesource for node 20 .debs
+RUN install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+        | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
+        > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update
+# Download (but do not install) all the runtimes we want to ship as .debs.
+# Includes transitive deps via -d (--download-only).
+RUN apt-get install -y --no-install-recommends -d \
+        nodejs \
+        ruby ruby-dev rubygems \
+        openjdk-17-jdk-headless \
+        maven
+RUN mkdir -p /staged-debs && cp /var/cache/apt/archives/*.deb /staged-debs/ \
+    && echo "staged $(ls /staged-debs/*.deb | wc -l) .debs"
+
+# ---- stage 2: combined toolchain image -----------------------------------
+FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8
+
+# Common runtime libs - matched to Dockerfile.clean-lang-base.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates curl gnupg \
+        libncurses6 libncursesw6 libtinfo6 \
+        libssl3 libsqlite3-0 libreadline8 libgmp10 \
+        libusb-1.0-0 libasound2 libpcre2-8-0 \
+        zlib1g libzstd1 liblz4-1 libbz2-1.0 \
+        libxml2 libcurl4 libffi8 libuuid1
+
+# Node 20 LTS - typescript and ts-node live globally under /usr/lib/node_modules
+RUN install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+        | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
+        > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install -y --no-install-recommends nodejs \
+    && npm install -g typescript@5.5.4 ts-node@10.9.2 \
+    && node --version && npm --version && tsc --version
+
+# Ruby + bundler
+RUN apt-get install -y --no-install-recommends \
+        ruby ruby-dev rubygems \
+    && gem install --no-document bundler rake \
+    && ruby --version && gem --version
+
+# Java 17 + Maven
+RUN apt-get install -y --no-install-recommends \
+        openjdk-17-jdk-headless maven \
+    && javac --version && java --version && mvn --version
+
+# Go 1.22 (newer than the eval container's Go 1.21, so the Go arm doesn't
+# need go.mod downgrades or GOFLAGS=-buildvcs=false). Installed at
+# /usr/local/go to mirror upstream layout; populator copies it into the
+# volume at /opt/all-langs/go.
+ARG GO_VERSION=1.22.5
+RUN set -eux; \
+    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o /tmp/go.tar.gz \
+    && tar -C /usr/local -xzf /tmp/go.tar.gz \
+    && rm /tmp/go.tar.gz \
+    && /usr/local/go/bin/go version
+
+# Copy the staged .debs from stage 1. The populator places these in
+# /opt/all-langs/debs/ inside the volume.
+COPY --from=deb-stage /staged-debs /staged-debs
+
+# Cleanup
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*

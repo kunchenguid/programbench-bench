@@ -1,0 +1,43 @@
+# Per-language cleanroom: Java arm.
+#
+# Toolchain: OpenJDK 17 (LTS) + Maven. We pick Maven over Gradle because
+# Maven's offline mode and local repository semantics are more predictable
+# under `--network none` than Gradle's plugin resolution.
+#
+# Deps: per-arm read-only volume `pb-deps-java` mounted at /opt/deps/java.
+# The volume contains a populated local Maven repo at
+# /opt/deps/java/.m2/repository. A baked-in /etc/maven/settings.xml
+# redirects Maven's localRepository there and disables remote repos.
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        openjdk-17-jdk-headless \
+        maven \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && javac --version && mvn --version
+
+# Maven settings: point localRepository at the mounted deps volume,
+# disable remote repos (offline mode is also passed at the command line
+# by the orchestration prompt as `mvn -o`).
+RUN mkdir -p /etc/maven && cat > /etc/maven/settings.xml <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0">
+  <localRepository>/opt/deps/java/.m2/repository</localRepository>
+  <offline>true</offline>
+  <mirrors>
+    <mirror>
+      <id>offline-noop</id>
+      <name>Disabled remote mirror</name>
+      <url>http://localhost.invalid/</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+
+ENV M2_HOME=/usr/share/maven \
+    MAVEN_OPTS="-Dmaven.repo.local=/opt/deps/java/.m2/repository"

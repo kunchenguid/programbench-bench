@@ -1,0 +1,196 @@
+# Multi-language cleanroom: codex-vanilla-clean arm (fair free-choice control).
+#
+# Purpose: give the FREE-CHOICE agent the SAME impoverished sandbox the
+# mandated codex-lang-<X> arms get, instead of the rich upstream task
+# image. This removes the two structural advantages the original
+# codex-vanilla arm enjoyed (documented in memory:project_codex-pilot-1-env-confound):
+#   1. wrapping system binaries (/usr/bin/jq, libzstd, ...) that exist in
+#      the upstream task image but not in a stripped cleanroom, and
+#   2. never suffering the cleanroom-vs-eval env mismatch (because for
+#      vanilla the cleanroom WAS the eval image).
+#
+# Topology: identical to the per-language arms. The agent drives this
+# cleanroom via `docker exec`; /workspace is overlaid from the upstream
+# `programbench/<task>:task` image at task start (spec + tests +
+# run-only executable). The difference from clean-lang-<X> is that ALL 8
+# language toolchains are present, so language choice is genuinely free.
+#
+# This is the UNION of the per-language toolchain layers, with two
+# deliberate deviations:
+#   - The js/ts images delete /usr/bin/python3 to enforce the strict
+#     JS-vs-TS A/B. We do NOT delete it here: free choice must include
+#     python.
+#   - All per-language deps volumes (pb-deps-{rust,go,python,js,ts,ruby,
+#     java}) are mounted at task start by run-codex.sh; C needs none.
+
+# Python 3.10 stage: copied in below to MATCH the eval container (Ubuntu
+# 22.04 -> CPython 3.10) instead of Debian 12's apt python 3.11. Keeping
+# the free-choice arm's python at the eval version removes the version-skew
+# false-zero class (e.g. tomllib) AND keeps it symmetric with the mandated
+# codex-lang-python arm, which is pinned to the same 3.10. python:3.10 is
+# bookworm (debian 12), so its ABI matches pb/clean-lang-base.
+FROM python:3.10-slim-bookworm AS py310
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# --- C toolchain + the -dev header superset (also covers native deps of
+#     rust/ruby/python builds) ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        gcc \
+        g++ \
+        make \
+        cmake \
+        pkg-config \
+        binutils \
+        libc6-dev \
+        libncurses-dev \
+        libncursesw5-dev \
+        libtinfo-dev \
+        libssl-dev \
+        libssh2-1-dev \
+        libgit2-dev \
+        libsqlite3-dev \
+        libreadline-dev \
+        libgmp-dev \
+        libusb-1.0-0-dev \
+        libasound2-dev \
+        libpcre2-dev \
+        zlib1g-dev \
+        libzstd-dev \
+        liblz4-dev \
+        libbz2-dev \
+        libxml2-dev \
+        libcurl4-openssl-dev \
+        libffi-dev \
+        uuid-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# --- Python 3.10 (eval-matched; copied from python:3.10-slim-bookworm,
+#     NOT apt's 3.11). NOT deleted later -- free choice must include
+#     python. See the py310 stage comment above. ---
+COPY --from=py310 /usr/local/bin/ /usr/local/bin/
+COPY --from=py310 /usr/local/lib/ /usr/local/lib/
+COPY --from=py310 /usr/local/include/ /usr/local/include/
+RUN ldconfig \
+    && ln -sf /usr/local/bin/python3.10 /usr/local/bin/python3 \
+    && ln -sf /usr/local/bin/python3.10 /usr/local/bin/python \
+    && python3 --version \
+    && python3 -m pip --version \
+    && python3 -m venv /tmp/_venvcheck && rm -rf /tmp/_venvcheck
+
+# --- Ruby (3.1) + bundler + rake ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ruby \
+        ruby-dev \
+        rubygems \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && gem install --no-document bundler rake \
+    && ruby --version && gem --version && bundle --version
+
+# --- Java (OpenJDK 17 + Maven) ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        openjdk-17-jdk-headless \
+        maven \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && javac --version && mvn --version
+RUN mkdir -p /etc/maven && cat > /etc/maven/settings.xml <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0">
+  <localRepository>/opt/deps/java/.m2/repository</localRepository>
+  <offline>true</offline>
+  <mirrors>
+    <mirror>
+      <id>offline-noop</id>
+      <name>Disabled remote mirror</name>
+      <url>http://localhost.invalid/</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+
+# --- Node 20 LTS + npm + typescript + ts-node (covers both js and ts).
+#     We do NOT delete python here (unlike clean-lang-js / clean-lang-ts). ---
+ARG NODE_MAJOR=20
+ARG TYPESCRIPT_VERSION=5.5.4
+ARG TS_NODE_VERSION=10.9.2
+RUN set -eux; \
+    apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+        | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" \
+        > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install -y --no-install-recommends nodejs \
+    && npm install -g typescript@${TYPESCRIPT_VERSION} ts-node@${TS_NODE_VERSION} \
+    && node --version && npm --version && tsc --version && ts-node --version \
+    && apt-get purge -y gnupg && apt-get autoremove -y \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# --- Go 1.22.5 (official tarball at /usr/local/go) ---
+ARG GO_VERSION=1.22.5
+RUN set -eux; \
+    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o /tmp/go.tar.gz \
+    && tar -C /usr/local -xzf /tmp/go.tar.gz \
+    && rm /tmp/go.tar.gz \
+    && /usr/local/go/bin/go version
+
+# --- Rust (rustup stable at /usr/local/cargo + /usr/local/rustup) ---
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo
+ARG RUSTUP_VERSION=1.27.1
+RUN set -eux; \
+    rustArch='x86_64-unknown-linux-gnu' \
+    && url="https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/${rustArch}/rustup-init" \
+    && curl -fsSL "$url" -o /tmp/rustup-init \
+    && chmod +x /tmp/rustup-init \
+    && /tmp/rustup-init -y --no-modify-path --profile minimal --default-toolchain stable \
+    && rm /tmp/rustup-init \
+    && chmod -R a+w "$RUSTUP_HOME" "$CARGO_HOME" \
+    && apt-get purge -y curl && apt-get autoremove -y \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && /usr/local/cargo/bin/rustc --version && /usr/local/cargo/bin/cargo --version
+RUN mkdir -p /usr/local/cargo && cat > /usr/local/cargo/config.toml <<'EOF'
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "/opt/deps/rust/vendor"
+
+[net]
+offline = true
+EOF
+
+# --- Symlink cargo/go binaries into /usr/local/bin so they resolve even
+#     in a login shell (which resets PATH from /etc/profile and would
+#     otherwise drop /usr/local/cargo/bin + /usr/local/go/bin). The agent
+#     runs via non-login `docker exec`, but be robust to either. ---
+RUN set -eux; \
+    for b in /usr/local/cargo/bin/*; do ln -sf "$b" "/usr/local/bin/$(basename "$b")"; done; \
+    for b in /usr/local/go/bin/*; do ln -sf "$b" "/usr/local/bin/$(basename "$b")"; done
+
+# --- Merged environment for all toolchains ---
+# PATH carries cargo + go + standard system dirs. Offline knobs for every
+# language's package manager point at the mounted deps volumes.
+ENV PATH=/usr/local/cargo/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GOMODCACHE=/opt/deps/go/pkg/mod \
+    GOPROXY=off \
+    GOFLAGS=-mod=mod \
+    CGO_ENABLED=1 \
+    PIP_NO_INDEX=1 \
+    PIP_FIND_LINKS=/opt/deps/python/wheels \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    GEM_PATH=/opt/deps/ruby/installed:/var/lib/gems/3.1.0:/usr/lib/ruby/gems/3.1.0 \
+    BUNDLE_PATH=/opt/deps/ruby/installed \
+    BUNDLE_DISABLE_SHARED_GEMS=false \
+    BUNDLE_CACHE_ALL=true \
+    BUNDLE_CACHE_PATH=/opt/deps/ruby/cache \
+    M2_HOME=/usr/share/maven \
+    MAVEN_OPTS="-Dmaven.repo.local=/opt/deps/java/.m2/repository" \
+    NPM_CONFIG_OFFLINE=true \
+    NPM_CONFIG_CACHE=/opt/deps/js/cache \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false \
+    NPM_CONFIG_PROGRESS=false

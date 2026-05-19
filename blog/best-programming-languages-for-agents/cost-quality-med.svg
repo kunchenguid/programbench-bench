@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="460" font-family="-apple-system,Helvetica,Arial,sans-serif">
+<rect width="560" height="460" fill="white"/>
+<text x="280.0" y="28" text-anchor="middle" font-size="17" font-weight="bold">MED tasks: cost vs quality</text>
+<text x="280.0" y="48" text-anchor="middle" font-size="11" fill="#666">x = token cost ($/task), y = mean pass-rate %. Top-left = cheap + good. Dashed = medians.</text>
+<rect x="70" y="70" width="460" height="330" fill="#fafafa" stroke="#ddd"/>
+<line x1="313.4" y1="70" x2="313.4" y2="400" stroke="#ccc" stroke-dasharray="5 4"/>
+<line x1="70" y1="170.1" x2="530" y2="170.1" stroke="#ccc" stroke-dasharray="5 4"/>
+<text x="300.0" y="438" text-anchor="middle" font-size="12" fill="#444">$ / task</text>
+<text transform="translate(20,235.0) rotate(-90)" text-anchor="middle" font-size="12" fill="#444">mean pass-rate %</text>
+<text x="70.0" y="418" text-anchor="middle" font-size="9" fill="#999">$1.11</text>
+<text x="62" y="403.0" text-anchor="end" font-size="9" fill="#999">49</text>
+<text x="185.0" y="418" text-anchor="middle" font-size="9" fill="#999">$1.18</text>
+<text x="62" y="320.5" text-anchor="end" font-size="9" fill="#999">51</text>
+<text x="300.0" y="418" text-anchor="middle" font-size="9" fill="#999">$1.26</text>
+<text x="62" y="238.0" text-anchor="end" font-size="9" fill="#999">53</text>
+<text x="415.0" y="418" text-anchor="middle" font-size="9" fill="#999">$1.34</text>
+<text x="62" y="155.5" text-anchor="end" font-size="9" fill="#999">55</text>
+<text x="530.0" y="418" text-anchor="middle" font-size="9" fill="#999">$1.41</text>
+<text x="62" y="73.0" text-anchor="end" font-size="9" fill="#999">57</text>
+<circle cx="262.9" cy="109.7" r="6" fill="#3572A5" stroke="white" stroke-width="1.2"/>
+<text x="271.9" y="112.7" font-size="12" font-weight="600" fill="#3572A5" text-anchor="start">python</text>
+<circle cx="114.5" cy="117.0" r="6" fill="#111111" stroke="white" stroke-width="1.2"/>
+<text x="123.5" y="120.0" font-size="12" font-weight="600" fill="#111111" text-anchor="start">free</text>
+<circle cx="313.4" cy="149.8" r="6" fill="#00ADD8" stroke="white" stroke-width="1.2"/>
+<text x="322.4" y="152.8" font-size="12" font-weight="600" fill="#00ADD8" text-anchor="start">go</text>
+<circle cx="401.5" cy="164.2" r="6" fill="#B7410E" stroke="white" stroke-width="1.2"/>
+<text x="410.5" y="167.2" font-size="12" font-weight="600" fill="#B7410E" text-anchor="start">rust</text>
+<circle cx="215.2" cy="170.1" r="6" fill="#D4B500" stroke="white" stroke-width="1.2"/>
+<text x="224.2" y="173.1" font-size="12" font-weight="600" fill="#D4B500" text-anchor="start">js</text>
+<circle cx="377.1" cy="212.5" r="6" fill="#3178C6" stroke="white" stroke-width="1.2"/>
+<text x="386.1" y="215.5" font-size="12" font-weight="600" fill="#3178C6" text-anchor="start">ts</text>
+<circle cx="485.5" cy="238.4" r="6" fill="#CC342D" stroke="white" stroke-width="1.2"/>
+<text x="494.5" y="241.4" font-size="12" font-weight="600" fill="#CC342D" text-anchor="start">ruby</text>
+<circle cx="159.9" cy="297.5" r="6" fill="#555555" stroke="white" stroke-width="1.2"/>
+<text x="168.9" y="300.5" font-size="12" font-weight="600" fill="#555555" text-anchor="start">c</text>
+<circle cx="359.4" cy="360.3" r="6" fill="#B07219" stroke="white" stroke-width="1.2"/>
+<text x="368.4" y="363.3" font-size="12" font-weight="600" fill="#B07219" text-anchor="start">java</text>
+</svg>

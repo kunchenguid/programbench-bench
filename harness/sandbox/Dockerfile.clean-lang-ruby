@@ -1,0 +1,36 @@
+# Per-language cleanroom: Ruby arm.
+#
+# Toolchain: ruby (Debian's default 3.1) + bundler + rake. Ruby's
+# packaging story is gem + bundler; we install both at the system level.
+#
+# Deps: per-arm read-only volume `pb-deps-ruby` mounted at /opt/deps/ruby.
+# The volume contains a `cache/` of .gem files (raw downloads) and an
+# `installed/` dir which is a populated GEM_HOME. We mount the installed
+# tree so `require "<pkg>"` works without `gem install` at agent runtime.
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ruby \
+        ruby-dev \
+        rubygems \
+        gcc \
+        make \
+        libc6-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && gem install --no-document bundler rake \
+    && ruby --version && gem --version && bundle --version
+
+# Point ruby at the offline gem tree mounted from the deps volume.
+# - GEM_PATH is searched at `require` time for installed gems.
+# - GEM_HOME is where `gem install` writes; we deliberately leave it as
+#   the system default so the agent can install additional gems if they
+#   are present in /opt/deps/ruby/cache (the local cache fallback).
+ENV GEM_PATH=/opt/deps/ruby/installed:/var/lib/gems/3.1.0:/usr/lib/ruby/gems/3.1.0 \
+    BUNDLE_PATH=/opt/deps/ruby/installed \
+    BUNDLE_DISABLE_SHARED_GEMS=false \
+    BUNDLE_CACHE_ALL=true \
+    BUNDLE_CACHE_PATH=/opt/deps/ruby/cache

@@ -1,0 +1,43 @@
+# Per-language cleanroom: JavaScript (no TypeScript) arm.
+#
+# Toolchain: Node.js LTS + npm. Critically: NO `tsc`, NO typescript
+# package in deps. Per the experiment design, JS-vs-TS is a strict A/B,
+# so any attempt to compile .ts here will fail.
+#
+# Deps: npm offline cache at /opt/deps/js. The volume contains a
+# `cache/` dir populated by `npm pack` of the top-100 npm packages.
+# Agents install via `npm install --offline --cache /opt/deps/js/cache`.
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Node 20 LTS (matches what pb/codex agent container uses, for consistency)
+ARG NODE_MAJOR=20
+RUN set -eux; \
+    apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+        | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" \
+        > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install -y --no-install-recommends nodejs \
+    && apt-get purge -y curl gnupg \
+    && apt-get autoremove -y \
+    # Remove user-callable python3 entrypoints so the agent cannot shell
+    # out to python from the JS arm (keeps the strict JS-vs-TS A/B clean).
+    # We delete binaries directly instead of apt-purge'ing python3* because
+    # nodejs from nodesource Depends: python3, so a purge would cascade
+    # and remove nodejs along with it.
+    && rm -f /usr/bin/python3 /usr/bin/python3.11 /usr/local/bin/python3 /usr/local/bin/python \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && node --version && npm --version
+
+# Point npm at the offline cache mounted from the deps volume. The agent
+# must use `npm install --offline --no-audit --no-fund` (or equivalent
+# .npmrc) to resolve packages locally only.
+ENV NPM_CONFIG_OFFLINE=true \
+    NPM_CONFIG_CACHE=/opt/deps/js/cache \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false \
+    NPM_CONFIG_PROGRESS=false

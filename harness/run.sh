@@ -58,7 +58,16 @@ TOKEN_FILE="$REPO/.claude-oauth-token"
 OAUTH_TOKEN="$(tr -d '\n\r ' < "$TOKEN_FILE")"
 [[ -n "$OAUTH_TOKEN" ]] || { echo "$TOKEN_FILE is empty" >&2; exit 2; }
 
-IMAGE="programbench/${TASK//__/_1776_}:task_cleanroom"
+# PB_PILOT2=1 selects the claude-pilot-2 topology: the agent cleanroom IS the
+# per-task `:task` eval image (cleanroom == eval by construction), mirroring
+# harness/run-codex.sh's pilot-2 branch. Default 0 keeps the original
+# `:task_cleanroom` topology of the vanilla/gstack-curated study.
+PB_PILOT2="${PB_PILOT2:-0}"
+if [[ "$PB_PILOT2" == "1" ]]; then
+  IMAGE="programbench/${TASK//__/_1776_}:task"
+else
+  IMAGE="programbench/${TASK//__/_1776_}:task_cleanroom"
+fi
 SUFFIX="${ARM}-${TASK//[^a-zA-Z0-9]/-}-$$"
 CLEANROOM="pb-clean-$SUFFIX"
 PROXY="pb-proxy-$SUFFIX"
@@ -96,11 +105,61 @@ docker network create --internal "$NET_INTERNAL" >/dev/null
 docker network create "$NET_BRIDGE" >/dev/null
 
 # --- Cleanroom (isolated, the agent does NOT share its network) ---
-echo "[sandbox] pulling cleanroom image $IMAGE"
-docker pull --platform linux/amd64 "$IMAGE" >"$LOG_OUT/docker-pull.log" 2>&1
-docker run -d --platform linux/amd64 \
-  --name "$CLEANROOM" --network none --cpus 4 -w /workspace \
-  "$IMAGE" sleep 8h >"$LOG_OUT/cleanroom.log" 2>&1
+# Skip pull when image is already local. `docker pull` would phone home to
+# check the manifest, which counts against Docker Hub's rate limit even on
+# a cache hit. With multi-arm pipelines pulling the same task images many
+# times, that adds up fast (we hit 429s on the codex per-language pipeline).
+if docker image inspect "$IMAGE" >/dev/null 2>&1; then
+  echo "[sandbox] cleanroom image $IMAGE already local; skipping pull"
+  echo "image cached locally; pull skipped" > "$LOG_OUT/docker-pull.log"
+else
+  echo "[sandbox] pulling cleanroom image $IMAGE"
+  docker pull --platform linux/amd64 "$IMAGE" >"$LOG_OUT/docker-pull.log" 2>&1
+fi
+if [[ "$PB_PILOT2" == "1" ]]; then
+  # ===== claude-pilot-2 topology (mirror of harness/run-codex.sh) =====
+  # Cleanroom IS the `:task` eval image. Mount the per-arm toolchain volumes at
+  # the SAME paths the eval mounts them, start the container, then run the arm's
+  # setup.sh (PATH + offline package config + toolkit symlinks; NO dpkg). The
+  # very same setup.sh is injected as the eval compile-prelude below, so both
+  # sides are configured identically. `:task` natively ships gcc/rust/go/python;
+  # node/ts, JDK17, maven, ruby come from the pb-toolkit2 volume.
+  P2_MOUNTS=()
+  p2_mount_vol() {
+    local v="$1" m="$2"
+    docker volume inspect "$v" >/dev/null 2>&1 || {
+      echo "[sandbox] error: required volume $v missing for arm $ARM" >&2; exit 3; }
+    P2_MOUNTS+=(-v "${v}:${m}:ro")
+  }
+  P2_KEEPLANG=""   # claude-free keeps all languages; mandated arms not wired yet
+  case "$ARM" in
+    claude-free)
+      p2_mount_vol pb-toolkit2 /opt/tk2
+      for _l in rust go python js ts ruby java; do p2_mount_vol "pb-deps-${_l}" "/opt/deps/${_l}"; done
+      ;;
+    *) echo "[sandbox] unsupported pilot-2 arm: $ARM (only claude-free wired so far)" >&2; exit 3 ;;
+  esac
+
+  echo "[sandbox] pilot-2 cleanroom from $IMAGE (keeplang=${P2_KEEPLANG:-free})"
+  docker run -d --platform linux/amd64 \
+    --name "$CLEANROOM" --network none --cpus 4 -w /workspace \
+    "${P2_MOUNTS[@]}" \
+    "$IMAGE" sleep 8h >"$LOG_OUT/cleanroom.log" 2>&1
+
+  # Activation: run the arm's setup.sh inside the cleanroom (same script the
+  # eval will run via the injected prelude).
+  SETUP="$REPO/arms/$ARM/setup.sh"
+  if [[ -f "$SETUP" ]]; then
+    docker cp "$SETUP" "$CLEANROOM:/opt/pb-setup.sh" >/dev/null
+    docker exec "$CLEANROOM" bash /opt/pb-setup.sh > "$LOG_OUT/cleanroom-setup.log" 2>&1 \
+      || { echo "[sandbox] WARN: setup.sh returned non-zero (see cleanroom-setup.log)" >&2; }
+  fi
+  echo "[sandbox] pilot-2 cleanroom ready (arm=$ARM)"
+else
+  docker run -d --platform linux/amd64 \
+    --name "$CLEANROOM" --network none --cpus 4 -w /workspace \
+    "$IMAGE" sleep 8h >"$LOG_OUT/cleanroom.log" 2>&1
+fi
 
 # --- Proxy (on bridge for outbound + on internal for the agent) ---
 docker run -d --platform linux/amd64 \
@@ -176,6 +235,38 @@ if docker exec -u agent "$CLEANROOM" test -f /workspace/submission.tar.gz; then
 else
   echo "[sandbox] WARNING: no submission.tar.gz produced" >&2
   tar czf "$RUN_OUT/submission.tar.gz" -T /dev/null
+fi
+
+# --- Auto-prepend pilot-2 setup.sh as compile.sh prelude ---
+# pilot-2 evaluation re-runs compile.sh inside a fresh `:task` container with
+# the toolkit/deps volumes mounted but NOT activated. Prepending the arm's
+# setup.sh (the SAME activation run in the cleanroom at start) makes the
+# eval-side toolchain configuration identical to the build side. Mirrors the
+# inject block in harness/run-codex.sh. COPYFILE_DISABLE=1 stops macOS BSD tar
+# from emitting AppleDouble `._*` companions that break the Linux eval.
+if [[ "$PB_PILOT2" == "1" ]]; then
+  PRELUDE="$REPO/arms/$ARM/setup.sh"
+  if [[ -f "$PRELUDE" ]] && [[ -s "$RUN_OUT/submission.tar.gz" ]]; then
+    echo "[sandbox] injecting setup.sh prelude into submission"
+    PREP_TMP="$(mktemp -d -t pb-prep-XXXX)"
+    if tar -xzf "$RUN_OUT/submission.tar.gz" -C "$PREP_TMP" 2>/dev/null && [[ -f "$PREP_TMP/compile.sh" ]]; then
+      shebang="$(head -n1 "$PREP_TMP/compile.sh")"
+      rest="$(tail -n +2 "$PREP_TMP/compile.sh")"
+      {
+        printf '%s\n' "$shebang"
+        echo "# ===== compile-prelude (auto-injected by harness/run.sh) ====="
+        cat "$PRELUDE"
+        echo "# ===== end compile-prelude ====="
+        printf '%s\n' "$rest"
+      } > "$PREP_TMP/compile.sh.new"
+      mv "$PREP_TMP/compile.sh.new" "$PREP_TMP/compile.sh"
+      chmod +x "$PREP_TMP/compile.sh"
+      (cd "$PREP_TMP" && COPYFILE_DISABLE=1 tar -czf "$RUN_OUT/submission.tar.gz" .)
+    else
+      echo "[sandbox] WARN: submission has no compile.sh; skipping prelude inject" >&2
+    fi
+    rm -rf "$PREP_TMP"
+  fi
 fi
 
 # --- Image prune (cleanroom; agent/proxy images stay cached) ---

@@ -113,5 +113,18 @@ Then stop. The harness will pick it up.
 - **You may use git locally** inside the container or in a scratch dir on the
   host (e.g., `git init`, `git diff`) — what's banned is fetching from the
   network.
+- **Genuine reimplementation only — no wrapping or delegating to the original tool.**
+  Your submission must implement the behavior yourself. The provided `./executable`
+  is for OBSERVATION ONLY (run it to study behavior). You MUST NOT, at build time or
+  runtime, depend on the original tool or any pre-built copy of it. Specifically:
+  - Do not shell out to / exec / spawn the original tool or a system binary of the
+    same tool (e.g. `/usr/bin/<tool>`, `/usr/local/bin/<tool>`), and do not shim to it.
+  - Do not copy, embed, or ship the provided `./executable`, or any other prebuilt
+    binary of the tool, as part of your solution.
+  - Do not link against, `dlopen`, or FFI-bind the tool's own shared library
+    (e.g. `lib<tool>.so`), and do not re-link its prebuilt object files.
+  - Do not install the tool via a package manager and delegate to it.
+  A thin wrapper around the original is not a valid submission; reimplement the
+  logic yourself in your language.
 - **Stop when you have a submission you believe is your best.** Don't keep
   iterating past diminishing returns.

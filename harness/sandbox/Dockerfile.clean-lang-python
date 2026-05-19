@@ -1,0 +1,44 @@
+# Per-language cleanroom: Python arm.
+#
+# Toolchain: python3 + pip + venv. No compiled-language toolchains.
+#
+# Deps: a per-arm read-only docker volume `pb-deps-python` mounted at
+# /opt/deps/python at task start. The volume contains a pip wheelhouse at
+# /opt/deps/python/wheels populated by `harness/build-deps-volume-python.sh`.
+# PIP_NO_INDEX + PIP_FIND_LINKS make `pip install <pkg>` resolve from the
+# wheelhouse without touching the network (the cleanroom runs --network
+# none anyway, but failing loudly is better than failing mysteriously).
+
+# Python 3.10 to MATCH the eval container. The eval runs in the upstream
+# task image (Ubuntu 22.04 -> CPython 3.10); the cleanroom MUST develop on
+# the SAME interpreter that scores the submission, or the agent reaches for
+# 3.11-only stdlib (e.g. `tomllib`) that silently false-zeros at eval on
+# 3.10. Debian 12's apt `python3` is 3.11, so instead we copy a 3.10
+# toolchain from the official python:3.10 image -- it is also bookworm
+# (debian 12), so its shared-lib ABI matches pb/clean-lang-base.
+# See AGENTS.md "cleanroom-vs-eval env mismatch" / memory:project_codex-pilot-1-env-confound.
+FROM python:3.10-slim-bookworm AS py310
+
+FROM pb/clean-lang-base:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY --from=py310 /usr/local/bin/ /usr/local/bin/
+COPY --from=py310 /usr/local/lib/ /usr/local/lib/
+COPY --from=py310 /usr/local/include/ /usr/local/include/
+RUN ldconfig \
+    && ln -sf /usr/local/bin/python3.10 /usr/local/bin/python3 \
+    && ln -sf /usr/local/bin/python3.10 /usr/local/bin/python \
+    && python3 --version \
+    && python3 -m pip --version \
+    && python3 -m venv /tmp/_venvcheck && rm -rf /tmp/_venvcheck
+
+# Direct pip at the wheelhouse mounted at /opt/deps/python/wheels. The
+# wheelhouse may not be mounted during image build/test, so commands that
+# don't use --break-system-packages will still see PEP 668. Agents that
+# want to install a vendored wheel should use `pip install --user <pkg>`
+# inside a venv, or `pip install --break-system-packages` for the system
+# interpreter.
+ENV PIP_NO_INDEX=1 \
+    PIP_FIND_LINKS=/opt/deps/python/wheels \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
