@@ -113,18 +113,30 @@ Then stop. The harness will pick it up.
 - **You may use git locally** inside the container or in a scratch dir on the
   host (e.g., `git init`, `git diff`) — what's banned is fetching from the
   network.
-- **Genuine reimplementation only — no wrapping or delegating to the original tool.**
-  Your submission must implement the behavior yourself. The provided `./executable`
-  is for OBSERVATION ONLY (run it to study behavior). You MUST NOT, at build time or
-  runtime, depend on the original tool or any pre-built copy of it. Specifically:
-  - Do not shell out to / exec / spawn the original tool or a system binary of the
-    same tool (e.g. `/usr/bin/<tool>`, `/usr/local/bin/<tool>`), and do not shim to it.
-  - Do not copy, embed, or ship the provided `./executable`, or any other prebuilt
-    binary of the tool, as part of your solution.
-  - Do not link against, `dlopen`, or FFI-bind the tool's own shared library
-    (e.g. `lib<tool>.so`), and do not re-link its prebuilt object files.
-  - Do not install the tool via a package manager and delegate to it.
-  A thin wrapper around the original is not a valid submission; reimplement the
-  logic yourself in your language.
+- **Genuine reimplementation only - no wrapping or delegating to the original tool's engine.**
+  Your submission must implement the behavior yourself, in source code you write. The provided
+  `./executable` is for OBSERVATION ONLY (run it to study behavior). You MUST NOT obtain the
+  tool's core functionality, at build or run time, from anywhere other than code you write.
+  Specifically forbidden:
+  - Shelling out to / exec'ing / spawning the original tool or a system binary of the same
+    tool (e.g. `/usr/bin/<tool>`, `/usr/local/bin/<tool>`), or shimming to it.
+  - Copying, embedding, vendoring, or shipping the provided `./executable`, the tool's
+    compiled binary, OR its shared library (e.g. `lib<tool>.so`) - including placing a copy
+    of the `.so` inside your submission and loading it.
+  - Linking against, `dlopen`-ing, FFI-binding, or `ctypes`-loading the tool's own C library,
+    or re-linking its object files.
+  - Using a third-party package that binds to, or bundles, the tool's original C engine -
+    e.g. a cgo SQLite driver (`mattn/go-sqlite3`), `libsqlite3-sys`, `sqlite-jdbc`, or the PyPI
+    `brotli`/`zstandard`/`lz4` wrapper packages. Those ARE the original engine.
+  - **Using your language's standard library implementation of the very algorithm the tool
+    implements.** If the task is to reimplement a compressor/codec/parser/database engine, you
+    may NOT call `python`'s `lzma`/`sqlite3`/`bz2`, Node's `zlib` brotli/gzip codec, Java's
+    JDBC, or any equivalent stdlib that simply IS that engine - the standard library counts as
+    the original engine for the task's core algorithm. (Ordinary stdlib utilities unrelated to
+    the core - file I/O, string handling, argument parsing, generic data structures - are fine.)
+  - Installing the tool via a package manager and delegating to it.
+  If you cannot fully reimplement the core algorithm, ship your best partial implementation in
+  your own code. A low score from an honest reimplementation is the correct outcome; a high
+  score obtained by wrapping the original engine is not a valid submission.
 - **Stop when you have a submission you believe is your best.** Don't keep
   iterating past diminishing returns.
