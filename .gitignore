@@ -15,6 +15,9 @@ __pycache__/
 .claude-oauth-token
 .claude/scheduled_tasks.lock
 
+# Draft narrative still being iterated on - kept local, not published yet
+blog/best-programming-languages-for-agents/index.md
+
 # Editor / OS
 .DS_Store
 *.swp
