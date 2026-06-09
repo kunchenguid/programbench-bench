@@ -58,3 +58,7 @@ From the repo root, with the harness venv:
 The raw per-test eval JSON (~11 GB) and the full agent transcripts (~176 MB) are too large for the repo.
 `data/per-task.csv` already carries the per-task aggregate (`n_total/n_ran/n_passed`).
 The full per-test detail and transcripts are available on request.
+
+## Tool original-language stratification
+
+The "matching the tool's language" section uses each task's *original* tool language, which ProgramBench ships in `task.yaml` (`language:` field, e.g. `rs`/`go`/`c`) alongside an exogenous `difficulty:` label. Those files live in the installed `programbench` package under `data/tasks/<task>/task.yaml`; join them to `data/per-task.csv` by task id to reproduce the native-advantage table and the free-choice native-match numbers.

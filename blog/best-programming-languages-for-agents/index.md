@@ -163,6 +163,36 @@ The throughline is Java's verbose stdlib and JVM conventions: more boilerplate p
 Neither is a disaster on any single task, but both reliably leave points on the floor relative to a scripting language or Rust, at no cost advantage.
 For agent-written, behavior-matching work, I would reach for almost anything else.
 
+## Most of the tools are Rust, and matching the tool's language helps only a little
+
+Every task reimplements a real tool, and that tool was originally written in some language; ProgramBench records it in each task's metadata.
+The distribution is lopsided: of the 192 tasks, **105 are Rust tools, 43 Go, 31 C, 12 C++, and 1 Haskell.**
+Every single one is a compiled or systems language; **not one is natively written in Python, JavaScript, TypeScript, Ruby, or Java.**
+So four of the eight mandated arms are *never* working in the tool's home language - the dynamic arms are always translating across an ecosystem boundary.
+
+This is most of the story behind Rust's easy-task crown.
+The easy tercile is **66% Rust tools**, the medium tercile 58%, the hard tercile only 41% (the hard tasks skew toward Go, C, and C++ engines).
+Rust is "best on easy" in large part because easy *is* mostly Rust, and a Rust arm matching a Rust tool's exact `clap`/`regex` behavior is the native-language advantage in its purest form.
+
+So does matching the tool's language actually help? **A little, and unevenly.**
+On the tasks whose tool is its own language, a mandated arm beats the average of the *other* mandated arms by:
+
+| tool language | tasks | native arm | other mandated (avg) | native advantage |
+| --- | ---: | ---: | ---: | ---: |
+| Rust | 105 | 57.1 | 54.9 | **+2.2** |
+| Go | 43 | 52.2 | 50.7 | **+1.5** |
+| C | 31 | 40.3 | 41.4 | **−1.1** |
+
+Rust and Go get a real but modest native bump.
+C is the exception, and for the same reason it finishes last overall: C's penalty is a *missing-batteries* tax (hand-rolling JSON, HTTP, regex) that matching idioms cannot pay off, so C does no better on its own tools than the other arms do.
+Across all native (arm, task) pairs the advantage averages **+1.4** - present, but small.
+
+The most actionable read is on free choice.
+The native language is available to free on every task, and on the tasks where free *did* pick it, free scored **59.0 versus 53.4** when it did not, a +5.6 swing.
+Yet free picked the native language only **13% of the time**; it defaults to Python on ~80% of tasks, including the Rust and Go tools where matching would have paid.
+(This is partly free's own selection - it tends to match native when it is already confident - but the gap is large enough that "match the tool's language more often" is a real lever free leaves mostly unused.)
+It is the translation-tax lesson from a different angle: the native edge is real, it is modest, and even gpt-5.5 mostly does not reach for it.
+
 ## Free choice is a good default
 
 Free choice is the highest-scoring arm (52.4) and the cheapest ($1.12/task), and it sits in the cheap-and-good corner of all three quadrant charts.
@@ -208,7 +238,8 @@ The de-polluted cells are one fresh sample each, so small per-arm wiggles (a poi
 
 **Difficulty is defined by the arms under study.**
 "Hard" means "this panel of arms scored low," which is endogenous.
-I use a leave-one-out difficulty for per-arm claims so an arm cannot inflate its own bin, but the panel-level circularity remains; an external difficulty proxy (test count, lines of code) would be cleaner.
+I use a leave-one-out difficulty for per-arm claims so an arm cannot inflate its own bin, but the panel-level circularity remains.
+As a check, ProgramBench also ships an exogenous easy/medium/hard label per task, and the cross-arm mean score rises monotonically with it (official easy 64.5, medium 56.1, hard 35.1), so the difficulty axis is not an artifact of my arm-derived terciles.
 
 **Small sample for group comparisons.**
 Eight mandated languages is a thin sample for the static-versus-dynamic split, so treat that as "no signal," not a measured null.
