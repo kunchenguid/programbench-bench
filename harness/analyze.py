@@ -361,6 +361,13 @@ REPORT_BLOCKLIST = {
     "stathissideris__ditaa",
     "tarka__xcp",
     "alecthomas__chroma",
+    # 1 unscoreable-by-wrapping task (2026-06-08, Kun's call): dsq runs SQL over
+    # data files via an embedded SQLite engine, which arms can satisfy only by
+    # delegating to a runtime-bundled engine (pure-Go sqlite driver, python
+    # sqlite3, etc.) that no cleanroom strip can remove and the anti-wrap prompt
+    # does not deter. It stays wrapped despite strip+prompt+rerun, so the task
+    # cannot be scored cleanly -> drop it. Reported denominator now n=192.
+    "multiprocessio__dsq",
 }
 
 
