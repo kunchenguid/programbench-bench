@@ -31,8 +31,9 @@ One row per (arm, task). Columns:
 - `cost_usd`, `turns`, `duration_min` - token cost and effort
 - `n_skills_invoked`, `skills_invoked`
 
-**Denominator.** The post reports **n = 192**. The CSV ships all 200 rows per arm for transparency; reproduce n = 192 by dropping these 8 blocklisted tasks - 7 structurally broken (4 disk-runaways + 3 hang/broken suites that score identically across every arm) plus `multiprocessio__dsq` (only satisfiable by an unstrippable runtime-bundled SQL engine):
+**Denominator.** The post reports **n = 192**, and the CSV ships exactly those 192 tasks per arm. These 8 blocklisted tasks are already excluded - 7 structurally broken (4 disk-runaways + 3 hang/broken suites that score identically across every arm) plus `multiprocessio__dsq` (only satisfiable by an unstrippable runtime-bundled SQL engine):
 `sharkdp__hyperfine`, `eliukblau__pixterm`, `ggreer__the_silver_searcher`, `tinycc__tinycc`, `stathissideris__ditaa`, `tarka__xcp`, `alecthomas__chroma`, `multiprocessio__dsq`.
+(The archives in `data/submissions/` still include them, 200 per arm.)
 
 **This is the de-polluted, timeout-fixed snapshot.** Two corrections are already baked into these numbers (see the post's Caveats):
 1. **De-pollution** - tasks where an arm wrapped the reference tool (linking `lib<tool>.so`, exec'ing `/usr/bin/<tool>`, copying the provided binary, etc.) were re-run in stripped cleanrooms with an anti-wrap prompt, and the clean scores spliced in. The submissions in `data/submissions/` are the clean ones.
