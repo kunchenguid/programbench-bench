@@ -12,7 +12,7 @@ Same model, same tasks, same sandbox, same scoring; the only variable is the lan
 
 Four findings carry the post:
 
-1. **Rust is the best easy-task language and one of the worst hard-task languages.** It wins where the contract is crisp and loses where coverage is what is missing.
+1. **Rust is the best easy-task language but has the steepest drop to the hard tasks.** It wins where the contract is crisp and falls into the low cluster where coverage is what is missing.
 2. **TypeScript's type checker earns its keep on hard tasks.** TypeScript and JavaScript tie overall, but on the hardest tasks TypeScript pulls ahead: `tsc` catches a class of crash bugs (unguarded `undefined`, unhandled union cases, bad imports) that JavaScript ships straight to a runtime failure. The surprise is that this pays off even though the agent rarely writes strict types: baseline inference plus a mandatory compile gate do the work almost for free.
 3. **The legacy systems languages, C and Java, are the two worst arms.** For agent work, I would steer away from them.
 4. **Free choice is a good default.** It is marginally the best-scoring arm and the cheapest, and you do not have to think about it.
@@ -43,8 +43,8 @@ I break the mean down by difficulty rather than reporting one pooled number beca
 Difficulty is defined as the cross-arm mean pass rate on each task (low = hard), split into equal-count thirds.
 I deliberately do not rank on a single solve-at-X% cutoff: the "winner" flips depending on where you put the bar (the score distributions cross), so no cutoff gives a stable ranking.
 
-**Denominator: n = 193.**
-I blocklist 7 structurally broken tasks (4 fill the disk and wedge the daemon; 3 produce identical failures across every arm regardless of submission).
+**Denominator: n = 192.**
+I blocklist 8 tasks: 7 structurally broken (4 fill the disk and wedge the daemon; 3 produce identical failures across every arm regardless of submission) plus `dsq`, which can only be satisfied by delegating to a SQL engine bundled in the language runtime that no sandbox strip can remove (see Caveats).
 
 ## The results
 
@@ -59,7 +59,7 @@ The clearest way to see it is cost versus quality at each difficulty level: each
 
 Three things to read off the panels.
 First, the quality axis is a **tight cluster**: at every difficulty the top six or seven languages sit within a few points, and the paired significance test cannot separate free choice from rust, python, go, ts, or ruby.
-The clear signal is at the *bottom*: free choice is statistically ahead of c, java, and js, and **c and java are the two worst arms** (low on every panel; c is also the worst on easy tasks).
+The clear signal is at the *bottom*: free choice is statistically ahead of only c and java, and **c and java are the two worst arms** (low on every panel; c is also the worst on easy tasks).
 Second, watch **rust** move across the panels: on easy tasks it is tied for the best quality but sits far to the right (most expensive), and on hard tasks it slides down and right (costly and weak), while free, python, and ts hold the top.
 Third, **free choice is the only arm in the cheap-and-good corner of all three panels** at once, which is also why it is marginally the highest-scoring arm overall and the cheapest.
 The rest of the post is why each of these happens.
@@ -67,7 +67,7 @@ The rest of the post is why each of these happens.
 ## Rust: best on easy, steepest drop on hard
 
 This is the cleanest finding in the study.
-Rust is the **best easy-task arm** (74.7) and falls to **7th of 9 on hard tasks** (25.5), with the steepest easy-to-hard drop of any language.
+Rust is the **best easy-task arm** (74.7) and falls into the **low cluster on hard tasks** (24.7), with the steepest easy-to-hard drop of any language.
 
 **Why it wins the easy tasks: it reproduces the exact contract.**
 Almost every easy tool in this set is itself a Rust/clap CLI, so the hidden tests encode clap's precise behavior, and Rust matches it where scripting languages only approximate the happy path.
@@ -83,7 +83,7 @@ That is exactly the edge that wins a fully-specified task: compiled, typed exact
 
 **Why the lead doesn't hold on hard tasks: its one advantage doesn't transfer.**
 The important nuance, because it is easy to overclaim here: Rust is *not* uniquely bad on hard tasks.
-It scores 25.5 there, in the low cluster with most arms, and js (24.8) and c (24.2) are actually below it.
+It scores 24.7 there, in the low cluster with most arms, and go (24.4), js (24.4), java (24.0), and c (23.9) are all at or below it.
 On a hard task the substance is a domain engine (an image decoder, a query language, a JavaScript interpreter), the bottleneck is **coverage**, and no arm's offline, network-free sandbox ships the library that would supply it, so the from-scratch arms all sink together.
 Rust names the ceiling out loud on chafa (image-to-ANSI):
 
@@ -92,16 +92,16 @@ Rust names the ceiling out loud on chafa (image-to-ANSI):
 But every other language hits the same wall: on quickjs, a whole JavaScript interpreter, the from-scratch arms all cratered (rust 3%, c 4%, go 4%, java 5%), and only the arms that could lean on the host JavaScript runtime survived (~60%).
 The codec and engine tasks floor for *everyone* (see Caveats), so the hard-task weakness is shared, not a Rust trait.
 
-What *is* Rust-specific is the **drop**: it has the steepest easy-to-hard fall of any arm, about 49 points.
+What *is* Rust-specific is the **drop**: it has the steepest easy-to-hard fall of any arm, about 50 points.
 Its edge, compiled and typed exactness, is a difficulty-specific advantage: it turns a crisp, fully-specified spec into a near-perfect score, and it turns a coverage problem into nothing.
 So Rust had the most to lose, precisely because the single thing it is best at is the thing that does not carry to hard tasks.
 
 **And it pays the most to do it.**
-Rust runs more build cycles than any arm (it pays a full `cargo build --release` on every fix, where a scripting arm re-runs the interpreter for free), and it is the **most expensive arm on hard tasks** ($1.40/task).
+Rust runs more build cycles than any arm (it pays a full `cargo build --release` on every fix, where a scripting arm re-runs the interpreter for free), and it is the **most expensive arm overall** and among the priciest on hard tasks ($1.42/task).
 On sqlite it ran 15 compile invocations to free's 3; it also hit Rust-specific friction (`clap_derive` was not vendored, forcing a mid-task parser rewrite on multiple tasks; `ring` "is building from vendored source, so this first pass takes a little longer").
 It spends the most exactly where the spend converts the least.
 
-Honest caveat on strength: the rust-versus-free crossover is **directional but only marginally significant** (free beats rust ~3.8 points on hard, ties on easy; interaction p ≈ 0.05).
+Honest caveat on strength: the rust-versus-free crossover is **directional but not significant** (free beats rust ~3.3 points on hard and is about a point behind on easy; interaction p ≈ 0.09).
 Part of the raw gap came from free wrapping several hard tasks rather than reimplementing them, which I stripped out and re-ran (see Caveats), so the de-polluted gap quoted here is the conservative one.
 The direction is real and matches the charts; I would not bet the farm on the magnitude.
 
@@ -111,9 +111,9 @@ The TypeScript-versus-JavaScript pair is a controlled experiment hiding inside t
 The only structural difference is that the TypeScript arm has to clear `tsc` before it can run.
 
 **Overall they tie.**
-TypeScript scored 51.7 to JavaScript's 50.9, a +0.8 gap that is not significant (paired Wilcoxon p = 0.90), and JavaScript actually wins more individual tasks (98 to 94).
+TypeScript scored 51.4 to JavaScript's 50.2, a +1.2 gap that is not significant (paired Wilcoxon p = 0.65), and the two split individual tasks nearly evenly (TypeScript wins 98, JavaScript 92).
 But the tie hides a split by difficulty.
-On the hardest third of tasks TypeScript beats JavaScript by +3.8 (29.5 versus 25.7), winning 25 of those tasks and losing 14.
+On the hardest third of tasks TypeScript beats JavaScript by +4.1 (28.5 versus 24.4), winning 25 of those tasks and losing 13.
 TypeScript wins fewer tasks but by larger margins, and the margins land where a program can crash outright.
 
 **What `tsc` catches are real type errors.**
@@ -142,7 +142,7 @@ The broader static-versus-dynamic split across all eight mandated arms is also a
 
 ## C and Java: the two worst arms, and I would avoid them for agents
 
-C (47.3) and Java (48.9) are the bottom two arms, both significantly below free choice.
+C (47.4) and Java (48.0) are the bottom two arms, and the only two arms significantly below free choice (paired Wilcoxon, Holm-corrected: c p < 0.0001, java p = 0.0001; every other arm is statistically tied with free).
 One sentence covers both: they pass the algorithmic core but bleed out on the long tail of CLI-contract details (flag aliases, value handling, error strings, output completeness), and they get no library leverage on the easy JSON/HTTP/regex tasks where the dynamic languages just import a crate.
 
 **C is a high-variance specialist that loses the median.**
@@ -165,10 +165,10 @@ For agent-written, behavior-matching work, I would reach for almost anything els
 
 ## Free choice is a good default
 
-Free choice is the highest-scoring arm (53.1) and the cheapest ($1.12/task), and it sits in the cheap-and-good corner of all three quadrant charts.
+Free choice is the highest-scoring arm (52.4) and the cheapest ($1.12/task), and it sits in the cheap-and-good corner of all three quadrant charts.
 
 **The picking is a smart default with two well-reasoned exceptions.**
-It chooses **Python on ~82% of tasks**, switches to **C for native/perf tools** ("I'm checking the container's installed headers and libraries before choosing C vs another language" on brotli), and to **Go for Go-ecosystem tools** (every Go-linter task, because the tool analyzes Go code: "the program is errcheck-like, a Go static analyzer; I'm creating throwaway Go packages to compare diagnostics").
+It chooses **Python on ~80% of tasks**, switches to **C for native/perf tools** ("I'm checking the container's installed headers and libraries before choosing C vs another language" on brotli), and to **Go for Go-ecosystem tools** (every Go-linter task, because the tool analyzes Go code: "the program is errcheck-like, a Go static analyzer; I'm creating throwaway Go packages to compare diagnostics").
 It even picks JavaScript when the tool _is_ a JS engine ("use the installed Node runtime as the ECMAScript engine" on quickjs).
 The picks are legible and adaptive.
 
@@ -177,13 +177,13 @@ On the 152 tasks where it picked Python, free averaged 41 turns and $1.15, versu
 The driver is build cycles: per task, rust averages 3.2 failed commands and 2.2 builds, TypeScript 3.2 failed and 3.8 builds, free 1.9 failed and 0.5 builds.
 On html-to-markdown, free (Python) used 18 commands, 0 builds, 0 non-zero exits; rust used 42 commands, 7 `cargo` invocations, 4 failures (burning turns on `error[E0382]: borrow of moved value`); TypeScript used 33 commands, 3 builds, 5 failures (`error TS2300: Duplicate identifier`).
 Python has no compile step, so those turns simply do not exist.
-That is why free is cheapest at _every_ difficulty, even hard ($1.13).
+That is why free is cheapest at _every_ difficulty, even hard ($1.15).
 
 **Why it is a good default: it rarely collapses.**
-Python reliably gets _something_ working, so free has one of the lowest near-zero rates of any arm, and it picks up partial credit broadly where a mandated compiled language craters: 63% on quickjs where every compiled arm scored ~4%, 74% on gron where mandated Java scored 0%, 57% on sqlite where mandated TypeScript scored 9%.
+Python reliably gets _something_ working, so free has one of the lowest near-zero rates of any arm, and it picks up partial credit broadly where a mandated compiled language craters: 63% on quickjs where every compiled arm scored ~4%, and 74% on gron where mandated Java scored 0%.
 
-The honest limit: free wins by beating the _average_ forced language (+1.8), not the best.
-An oracle picking the ideal language per task would score 61.0, about 8 points above free, and free does make real mispicks: on gowsdl it reasoned "I'm going to implement a small WSDL parser in Python, which is a better fit here," scored 15%, and the mandated Go arm scored 72% because the tool emits Go source.
+The honest limit: free wins by beating the _average_ forced language (+2.3), not the best.
+An oracle picking the ideal language per task would score 59.3, about 7 points above free, and free does make real mispicks: on gowsdl it reasoned "I'm going to implement a small WSDL parser in Python, which is a better fit here," scored 15%, and the mandated Go arm scored 72% because the tool emits Go source.
 But that is the whole point: **you cannot reliably beat free choice by mandating a language without already knowing the answer, and even gpt-5.5 cannot call it in advance.**
 Letting the model choose gets you the top of the cluster, at the lowest cost, with zero configuration: a good default.
 (One caveat: some of free's edge on hard tasks came from wrapping the reference tool rather than reimplementing it; with that stripped out and re-run, its lead is marginal and it is not uniquely robust on hard tasks. What stands is: marginally best, cheapest, and a sensible no-think default.)
@@ -192,15 +192,15 @@ Letting the model choose gets you the top of the cluster, at the lowest cost, wi
 
 Before computing any of these numbers I fixed two measurement artifacts.
 First, a per-test process-startup timeout was scoring slow-starting tests as zero (it had put Java in a false last place); I re-scored everything at a 6-hour timeout to remove it.
-Second, our sandbox leaked the reference tool (its binary, shared libraries, and source), so on 11 tasks some arms passed by wrapping the real tool instead of reimplementing it; I rebuilt those environments to strip the reference, re-ran the 33 affected language-task cells, and verified zero residual wrapping.
+Second, our sandbox leaked the reference tool (its binary, shared libraries, and source), so some arms passed by wrapping the real tool instead of reimplementing it. I code-read every at-risk task across all nine arms, stripped the reference and re-ran each wrapping cell (and strengthened the prompt to forbid stdlib/runtime engines too, like Node's built-in brotli or Python's `sqlite3`), then re-audited until zero working wraps remained. One task, `dsq`, can only run its queries through a SQL engine bundled in the language runtime that no strip can remove, so it is blocklisted (the 8th excluded task).
 Every number in this post is on that de-polluted, timeout-corrected data.
 Those two are fixed; the caveats below are the ones that remain, and they bound how hard you should lean on the numbers.
 
 **A class of tasks measures library-discovery, not language capability.**
-The codecs and engines, zstd, brotli, lz4, sqlite, ffmpeg, chafa, ctags, are effectively impossible to reimplement from scratch in one session, so de-polluted they floor to near-zero for _every_ arm.
-gpt-5.5 never once reimplemented a compression codec in any language; it always linked the library (which is exactly the wrapping we stripped).
-These tasks land in the hard tercile and add floor-noise there; they do not discriminate between languages, they discriminate "did you find the library."
-The one exception is blake3, which is genuinely reimplementable (it held at 82% when forced).
+The codecs and engines, brotli, sqlite, lz4, ffmpeg, chafa, ctags, are effectively impossible to reimplement from scratch in one session, so de-polluted they floor to near-zero for _every_ arm; the two with a large argument/format surface (zstd, xz) reach the 30-60 band on flag and format handling but still never implement the actual codec.
+gpt-5.5 never once reimplemented a compression codec or database engine in any language; it always reached for the library or a runtime-bundled one (which is exactly the wrapping we stripped, and why `dsq` is blocklisted).
+These tasks land in the hard tercile and add floor-noise there; they do not discriminate between languages, they discriminate "did you find the engine."
+The one exception is blake3, which is genuinely reimplementable (it held at ~85% across arms when forced).
 
 **Per-task scores carry agent run-variance.**
 Re-running the same agent on the same task produces a different submission; on a single task the score can move 10-15 points just from that.
@@ -218,6 +218,6 @@ Eight mandated languages is a thin sample for the static-versus-dynamic split, s
 The data sits next to this post under `data/`, and every quote here is verbatim from a real trajectory.
 `data/per-task.csv` has the per-task pass rate, cost, and chosen language for all nine arms, and `data/submissions/` has the code gpt-5.5 actually wrote for every task in every language: the same tool, reimplemented nine ways.
 Every table and chart in this post is recomputable from that CSV; `DATA.md` documents the columns and the steps.
-n = 193 tasks per arm, nine arms, one model, on de-polluted data (reference binary stripped, timeout artifact removed).
+n = 192 tasks per arm, nine arms, one model, on de-polluted data (reference engine stripped, timeout artifact removed).
 The part I would most like a second pair of eyes on is the de-pollution: the strip scripts and the re-run path live in the harness (`DATA.md` points to them), so if you re-strip and re-run and the rankings shift, I want to see it.
 (The raw per-test eval JSON and full transcripts are too large to ship in the repo; they are available on request.)
