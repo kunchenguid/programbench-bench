@@ -1,6 +1,7 @@
 # Run outputs (per-task submissions, eval results, transcripts)
 runs/
 logs/
+.lavish/
 
 # Local recovery backups (pre-rerun eval JSONs, de-pollution originals) - multi-GB, never committed
 backups/

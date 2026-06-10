@@ -1,0 +1,2530 @@
+{
+ "n": 192,
+ "per_lang": [
+  {
+   "lang": "c",
+   "pct": 47.445,
+   "solve75": 6.25,
+   "failed_cmds": 1.672,
+   "fail_rate": 0.062,
+   "build_fail_rate": 0.146,
+   "static_errs": 0.427,
+   "runtime_errs": 0.068,
+   "static_share": 0.923,
+   "loop_max": 0.266,
+   "loop3_share": 0.0,
+   "first_green": 0.544,
+   "late_fail_frac": 0.283,
+   "re_edits": 2.672,
+   "late_re_edits": 1.26,
+   "churn": 1.361,
+   "loc": 370.688,
+   "src_files": 1.01,
+   "turns": 38.062,
+   "duration": 5.263,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.04,
+   "failed_of_ran": 0.5,
+   "group": "static"
+  },
+  {
+   "lang": "go",
+   "pct": 50.124,
+   "solve75": 15.104,
+   "failed_cmds": 2.021,
+   "fail_rate": 0.069,
+   "build_fail_rate": 0.269,
+   "static_errs": 0.161,
+   "runtime_errs": 0.141,
+   "static_share": 0.636,
+   "loop_max": 0.302,
+   "loop3_share": 0.005,
+   "first_green": 0.592,
+   "late_fail_frac": 0.349,
+   "re_edits": 2.484,
+   "late_re_edits": 1.292,
+   "churn": 1.002,
+   "loc": 822.688,
+   "src_files": 1.708,
+   "turns": 39.818,
+   "duration": 5.35,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.05,
+   "failed_of_ran": 0.465,
+   "group": "static"
+  },
+  {
+   "lang": "java",
+   "pct": 48.037,
+   "solve75": 9.896,
+   "failed_cmds": 1.896,
+   "fail_rate": 0.071,
+   "build_fail_rate": 0.06,
+   "static_errs": 0.203,
+   "runtime_errs": 0.099,
+   "static_share": 0.714,
+   "loop_max": 0.276,
+   "loop3_share": 0.01,
+   "first_green": 0.542,
+   "late_fail_frac": 0.364,
+   "re_edits": 2.635,
+   "late_re_edits": 1.177,
+   "churn": 1.418,
+   "loc": 385.047,
+   "src_files": 1.062,
+   "turns": 41.078,
+   "duration": 5.215,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.047,
+   "failed_of_ran": 0.495,
+   "group": "static"
+  },
+  {
+   "lang": "js",
+   "pct": 50.171,
+   "solve75": 12.5,
+   "failed_cmds": 1.979,
+   "fail_rate": 0.068,
+   "build_fail_rate": 0.068,
+   "static_errs": 0.083,
+   "runtime_errs": 0.031,
+   "static_share": 0.75,
+   "loop_max": 0.141,
+   "loop3_share": 0.0,
+   "first_green": 0.707,
+   "late_fail_frac": 0.363,
+   "re_edits": 2.938,
+   "late_re_edits": 1.286,
+   "churn": 1.564,
+   "loc": 690.302,
+   "src_files": 4.542,
+   "turns": 41.781,
+   "duration": 4.936,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.032,
+   "failed_of_ran": 0.476,
+   "group": "dynamic"
+  },
+  {
+   "lang": "python",
+   "pct": 51.841,
+   "solve75": 15.625,
+   "failed_cmds": 2.01,
+   "fail_rate": 0.07,
+   "build_fail_rate": 0.061,
+   "static_errs": 0.109,
+   "runtime_errs": 0.203,
+   "static_share": 0.341,
+   "loop_max": 0.177,
+   "loop3_share": 0.0,
+   "first_green": 0.735,
+   "late_fail_frac": 0.295,
+   "re_edits": 2.76,
+   "late_re_edits": 1.224,
+   "churn": 1.547,
+   "loc": 497.375,
+   "src_files": 1.005,
+   "turns": 41.01,
+   "duration": 4.773,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.035,
+   "failed_of_ran": 0.456,
+   "group": "dynamic"
+  },
+  {
+   "lang": "ruby",
+   "pct": 50.56,
+   "solve75": 12.5,
+   "failed_cmds": 3.198,
+   "fail_rate": 0.1,
+   "build_fail_rate": 0.29,
+   "static_errs": 0.266,
+   "runtime_errs": 1.417,
+   "static_share": 0.113,
+   "loop_max": 0.135,
+   "loop3_share": 0.0,
+   "first_green": 0.698,
+   "late_fail_frac": 0.306,
+   "re_edits": 4.016,
+   "late_re_edits": 1.635,
+   "churn": 2.232,
+   "loc": 481.135,
+   "src_files": 1.005,
+   "turns": 45.26,
+   "duration": 5.101,
+   "compile_ok": 0.995,
+   "not_run_frac": 0.041,
+   "failed_of_ran": 0.467,
+   "group": "dynamic"
+  },
+  {
+   "lang": "rust",
+   "pct": 51.118,
+   "solve75": 16.667,
+   "failed_cmds": 3.172,
+   "fail_rate": 0.097,
+   "build_fail_rate": 0.165,
+   "static_errs": 2.068,
+   "runtime_errs": 0.01,
+   "static_share": 0.992,
+   "loop_max": 0.776,
+   "loop3_share": 0.005,
+   "first_green": 0.535,
+   "late_fail_frac": 0.312,
+   "re_edits": 3.453,
+   "late_re_edits": 1.573,
+   "churn": 1.56,
+   "loc": 501.948,
+   "src_files": 1.036,
+   "turns": 44.719,
+   "duration": 5.821,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.039,
+   "failed_of_ran": 0.461,
+   "group": "static"
+  },
+  {
+   "lang": "ts",
+   "pct": 51.444,
+   "solve75": 14.062,
+   "failed_cmds": 3.229,
+   "fail_rate": 0.116,
+   "build_fail_rate": 0.05,
+   "static_errs": 1.255,
+   "runtime_errs": 0.021,
+   "static_share": 0.984,
+   "loop_max": 1.266,
+   "loop3_share": 0.062,
+   "first_green": 0.449,
+   "late_fail_frac": 0.382,
+   "re_edits": 3.219,
+   "late_re_edits": 1.87,
+   "churn": 0.955,
+   "loc": 386.427,
+   "src_files": 1.208,
+   "turns": 42.411,
+   "duration": 5.057,
+   "compile_ok": 1.0,
+   "not_run_frac": 0.038,
+   "failed_of_ran": 0.456,
+   "group": "static"
+  }
+ ],
+ "group_means": [
+  {
+   "group": "dynamic",
+   "fail_rate": 0.079,
+   "n_static_err_cmds": 0.153,
+   "n_runtime_err_cmds": 0.55,
+   "max_same_err_loop": 0.151,
+   "n_late_re_edits": 1.382,
+   "churn": 1.783,
+   "not_run_frac": 0.036,
+   "failed_frac_of_ran": 0.467,
+   "pct": 50.857
+  },
+  {
+   "group": "static",
+   "fail_rate": 0.083,
+   "n_static_err_cmds": 0.823,
+   "n_runtime_err_cmds": 0.068,
+   "max_same_err_loop": 0.577,
+   "n_late_re_edits": 1.434,
+   "churn": 1.252,
+   "not_run_frac": 0.043,
+   "failed_frac_of_ran": 0.475,
+   "pct": 49.634
+  }
+ ],
+ "group_tests": {
+  "n_static_err_cmds": {
+   "static": 0.8229166666666666,
+   "dynamic": 0.1527777777777778,
+   "p": 1.3934669253686973e-41
+  },
+  "n_runtime_err_cmds": {
+   "static": 0.06770833333333333,
+   "dynamic": 0.5503472222222222,
+   "p": 9.860253422730408e-46
+  },
+  "max_same_err_loop": {
+   "static": 0.5770833333333333,
+   "dynamic": 0.15104166666666666,
+   "p": 2.2195838925138918e-37
+  },
+  "not_run_frac": {
+   "static": 0.04286072487726717,
+   "dynamic": 0.03600591088453944,
+   "p": 0.2072292522982575
+  },
+  "failed_frac_of_ran": {
+   "static": 0.47549761339573704,
+   "dynamic": 0.4665276523476465,
+   "p": 0.3404441494239987
+  },
+  "n_late_re_edits": {
+   "static": 1.434375,
+   "dynamic": 1.3819444444444444,
+   "p": 0.28134487286703813
+  }
+ },
+ "loop_cost": [
+  {
+   "lang": "ts",
+   "n_stuck": 12,
+   "pct_stuck": 64.332,
+   "pct_ok": 50.585,
+   "delta": 13.747,
+   "p": 0.048
+  }
+ ],
+ "scale_corr": [
+  {
+   "lang": "c",
+   "rho_tests": -0.2959,
+   "p_tests": 0.0,
+   "rho_loc": -0.3798,
+   "p_loc": 0.0
+  },
+  {
+   "lang": "go",
+   "rho_tests": -0.2268,
+   "p_tests": 0.0016,
+   "rho_loc": -0.276,
+   "p_loc": 0.0001
+  },
+  {
+   "lang": "java",
+   "rho_tests": -0.2574,
+   "p_tests": 0.0003,
+   "rho_loc": -0.3337,
+   "p_loc": 0.0
+  },
+  {
+   "lang": "js",
+   "rho_tests": -0.2575,
+   "p_tests": 0.0003,
+   "rho_loc": -0.2715,
+   "p_loc": 0.0001
+  },
+  {
+   "lang": "python",
+   "rho_tests": -0.2184,
+   "p_tests": 0.0023,
+   "rho_loc": -0.3017,
+   "p_loc": 0.0
+  },
+  {
+   "lang": "ruby",
+   "rho_tests": -0.2132,
+   "p_tests": 0.003,
+   "rho_loc": -0.3008,
+   "p_loc": 0.0
+  },
+  {
+   "lang": "rust",
+   "rho_tests": -0.2502,
+   "p_tests": 0.0005,
+   "rho_loc": -0.3445,
+   "p_loc": 0.0
+  },
+  {
+   "lang": "ts",
+   "rho_tests": -0.2315,
+   "p_tests": 0.0012,
+   "rho_loc": -0.3962,
+   "p_loc": 0.0
+  }
+ ],
+ "paired_by_scale": [
+  {
+   "pair": "python-vs-rust",
+   "tercile": "small",
+   "n": 64,
+   "mean_delta": -1.1989,
+   "median_delta": 0.054,
+   "win": 32.0,
+   "lose": 30.0,
+   "p_wilcoxon": 0.7917
+  },
+  {
+   "pair": "python-vs-rust",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 1.7238,
+   "median_delta": 2.1255,
+   "win": 39.0,
+   "lose": 22.0,
+   "p_wilcoxon": 0.0753
+  },
+  {
+   "pair": "python-vs-rust",
+   "tercile": "large",
+   "n": 64,
+   "mean_delta": 1.6428,
+   "median_delta": 1.1185,
+   "win": 39.0,
+   "lose": 24.0,
+   "p_wilcoxon": 0.0589
+  },
+  {
+   "pair": "python-vs-rust",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.0744,
+   "median_delta": NaN,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.3053
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "small",
+   "n": 64,
+   "mean_delta": 2.627,
+   "median_delta": 1.332,
+   "win": 40.0,
+   "lose": 23.0,
+   "p_wilcoxon": 0.0913
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 0.1908,
+   "median_delta": 0.6949,
+   "win": 36.0,
+   "lose": 27.0,
+   "p_wilcoxon": 0.2999
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "large",
+   "n": 64,
+   "mean_delta": 2.3317,
+   "median_delta": 1.2008,
+   "win": 37.0,
+   "lose": 26.0,
+   "p_wilcoxon": 0.0715
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": -0.0532,
+   "median_delta": NaN,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.4639
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "small",
+   "n": 64,
+   "mean_delta": 4.8589,
+   "median_delta": 1.0059,
+   "win": 36.0,
+   "lose": 27.0,
+   "p_wilcoxon": 0.0589
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 2.2916,
+   "median_delta": 2.157,
+   "win": 43.0,
+   "lose": 20.0,
+   "p_wilcoxon": 0.006
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "large",
+   "n": 64,
+   "mean_delta": 4.2617,
+   "median_delta": 2.6664,
+   "win": 48.0,
+   "lose": 16.0,
+   "p_wilcoxon": 0.0001
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.0575,
+   "median_delta": NaN,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.4286
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "small",
+   "n": 64,
+   "mean_delta": -0.3059,
+   "median_delta": 0.554,
+   "win": 34.0,
+   "lose": 30.0,
+   "p_wilcoxon": 0.8462
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": -0.2434,
+   "median_delta": 0.843,
+   "win": 38.0,
+   "lose": 26.0,
+   "p_wilcoxon": 0.319
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "large",
+   "n": 64,
+   "mean_delta": 1.7397,
+   "median_delta": 1.0005,
+   "win": 35.0,
+   "lose": 29.0,
+   "p_wilcoxon": 0.129
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.084,
+   "median_delta": NaN,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.2466
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "small",
+   "n": 64,
+   "mean_delta": 3.3096,
+   "median_delta": 4.1603,
+   "win": 42.0,
+   "lose": 22.0,
+   "p_wilcoxon": 0.0222
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 4.6424,
+   "median_delta": 4.5528,
+   "win": 49.0,
+   "lose": 15.0,
+   "p_wilcoxon": 0.0001
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "large",
+   "n": 64,
+   "mean_delta": 5.2363,
+   "median_delta": 4.5385,
+   "win": 51.0,
+   "lose": 13.0,
+   "p_wilcoxon": 0.0
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.0142,
+   "median_delta": NaN,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.8455
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "small",
+   "n": 64,
+   "mean_delta": -1.5403,
+   "median_delta": -0.1733,
+   "win": 29.0,
+   "lose": 33.0,
+   "p_wilcoxon": 0.6809
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": -1.2854,
+   "median_delta": -0.2255,
+   "win": 32.0,
+   "lose": 32.0,
+   "p_wilcoxon": 0.7482
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "large",
+   "n": 64,
+   "mean_delta": -0.9931,
+   "median_delta": -0.197,
+   "win": 31.0,
+   "lose": 33.0,
+   "p_wilcoxon": 0.4867
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.0193,
+   "median_delta": NaN,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.7902
+  }
+ ],
+ "paired_by_difficulty": [
+  {
+   "pair": "python-vs-rust",
+   "tercile": "hard",
+   "n": 64,
+   "mean_delta": 2.5666,
+   "win": 41.0,
+   "lose": 21.0,
+   "p_wilcoxon": 0.0085
+  },
+  {
+   "pair": "python-vs-rust",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 1.5509,
+   "win": 37.0,
+   "lose": 25.0,
+   "p_wilcoxon": 0.3406
+  },
+  {
+   "pair": "python-vs-rust",
+   "tercile": "easy",
+   "n": 64,
+   "mean_delta": -1.9498,
+   "win": 32.0,
+   "lose": 30.0,
+   "p_wilcoxon": 0.8332
+  },
+  {
+   "pair": "python-vs-rust",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": -0.1242,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.086
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "hard",
+   "n": 64,
+   "mean_delta": 2.4536,
+   "win": 41.0,
+   "lose": 22.0,
+   "p_wilcoxon": 0.0232
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 0.2529,
+   "win": 34.0,
+   "lose": 30.0,
+   "p_wilcoxon": 0.4784
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "easy",
+   "n": 64,
+   "mean_delta": 2.443,
+   "win": 38.0,
+   "lose": 24.0,
+   "p_wilcoxon": 0.0747
+  },
+  {
+   "pair": "python-vs-go",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.0095,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.8957
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "hard",
+   "n": 64,
+   "mean_delta": 2.3829,
+   "win": 45.0,
+   "lose": 19.0,
+   "p_wilcoxon": 0.0015
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 5.8733,
+   "win": 43.0,
+   "lose": 21.0,
+   "p_wilcoxon": 0.0039
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "easy",
+   "n": 64,
+   "mean_delta": 3.156,
+   "win": 39.0,
+   "lose": 23.0,
+   "p_wilcoxon": 0.0417
+  },
+  {
+   "pair": "python-vs-java",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.0377,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.6038
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "hard",
+   "n": 64,
+   "mean_delta": -1.5931,
+   "win": 29.0,
+   "lose": 35.0,
+   "p_wilcoxon": 0.5743
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 1.7331,
+   "win": 37.0,
+   "lose": 27.0,
+   "p_wilcoxon": 0.2473
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "easy",
+   "n": 64,
+   "mean_delta": 1.0506,
+   "win": 41.0,
+   "lose": 23.0,
+   "p_wilcoxon": 0.0959
+  },
+  {
+   "pair": "python-vs-ts",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.1055,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.1451
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "hard",
+   "n": 64,
+   "mean_delta": 3.1353,
+   "win": 45.0,
+   "lose": 19.0,
+   "p_wilcoxon": 0.0033
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": 2.8723,
+   "win": 45.0,
+   "lose": 19.0,
+   "p_wilcoxon": 0.01
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "easy",
+   "n": 64,
+   "mean_delta": 7.1806,
+   "win": 52.0,
+   "lose": 12.0,
+   "p_wilcoxon": 0.0
+  },
+  {
+   "pair": "python-vs-c",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.1485,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.0398
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "hard",
+   "n": 64,
+   "mean_delta": -3.4267,
+   "win": 24.0,
+   "lose": 39.0,
+   "p_wilcoxon": 0.0194
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "mid",
+   "n": 64,
+   "mean_delta": -0.4564,
+   "win": 34.0,
+   "lose": 29.0,
+   "p_wilcoxon": 0.4722
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "easy",
+   "n": 64,
+   "mean_delta": 0.0644,
+   "win": 34.0,
+   "lose": 30.0,
+   "p_wilcoxon": 0.4184
+  },
+  {
+   "pair": "js-vs-ts",
+   "tercile": "SLOPE(rho)",
+   "n": 192,
+   "mean_delta": 0.1321,
+   "win": NaN,
+   "lose": NaN,
+   "p_wilcoxon": 0.0678
+  }
+ ],
+ "horizon": [
+  {
+   "lang": "c",
+   "early_fail_frac": 0.203,
+   "late_fail_frac": 0.283,
+   "late_static_errs": 0.182,
+   "n_late_re_edits": 1.26,
+   "static_share": 0.923
+  },
+  {
+   "lang": "go",
+   "early_fail_frac": 0.169,
+   "late_fail_frac": 0.349,
+   "late_static_errs": 0.042,
+   "n_late_re_edits": 1.292,
+   "static_share": 0.636
+  },
+  {
+   "lang": "java",
+   "early_fail_frac": 0.133,
+   "late_fail_frac": 0.364,
+   "late_static_errs": 0.094,
+   "n_late_re_edits": 1.177,
+   "static_share": 0.714
+  },
+  {
+   "lang": "js",
+   "early_fail_frac": 0.14,
+   "late_fail_frac": 0.363,
+   "late_static_errs": 0.036,
+   "n_late_re_edits": 1.286,
+   "static_share": 0.75
+  },
+  {
+   "lang": "python",
+   "early_fail_frac": 0.201,
+   "late_fail_frac": 0.295,
+   "late_static_errs": 0.042,
+   "n_late_re_edits": 1.224,
+   "static_share": 0.341
+  },
+  {
+   "lang": "ruby",
+   "early_fail_frac": 0.143,
+   "late_fail_frac": 0.306,
+   "late_static_errs": 0.104,
+   "n_late_re_edits": 1.635,
+   "static_share": 0.113
+  },
+  {
+   "lang": "rust",
+   "early_fail_frac": 0.112,
+   "late_fail_frac": 0.312,
+   "late_static_errs": 0.589,
+   "n_late_re_edits": 1.573,
+   "static_share": 0.992
+  },
+  {
+   "lang": "ts",
+   "early_fail_frac": 0.121,
+   "late_fail_frac": 0.382,
+   "late_static_errs": 0.531,
+   "n_late_re_edits": 1.87,
+   "static_share": 0.984
+  }
+ ],
+ "eval_deferral": [
+  {
+   "lang": "c",
+   "n": 192,
+   "not_run_frac": 0.04,
+   "failed_of_ran": 0.5
+  },
+  {
+   "lang": "go",
+   "n": 192,
+   "not_run_frac": 0.05,
+   "failed_of_ran": 0.465
+  },
+  {
+   "lang": "java",
+   "n": 192,
+   "not_run_frac": 0.047,
+   "failed_of_ran": 0.495
+  },
+  {
+   "lang": "js",
+   "n": 192,
+   "not_run_frac": 0.032,
+   "failed_of_ran": 0.476
+  },
+  {
+   "lang": "python",
+   "n": 192,
+   "not_run_frac": 0.035,
+   "failed_of_ran": 0.456
+  },
+  {
+   "lang": "ruby",
+   "n": 191,
+   "not_run_frac": 0.036,
+   "failed_of_ran": 0.467
+  },
+  {
+   "lang": "rust",
+   "n": 192,
+   "not_run_frac": 0.039,
+   "failed_of_ran": 0.461
+  },
+  {
+   "lang": "ts",
+   "n": 192,
+   "not_run_frac": 0.038,
+   "failed_of_ran": 0.456
+  }
+ ],
+ "free_choice": [
+  {
+   "language": "c",
+   "n": 16,
+   "pct": 59.71
+  },
+  {
+   "language": "go",
+   "n": 14,
+   "pct": 49.67
+  },
+  {
+   "language": "js",
+   "n": 2,
+   "pct": 31.98
+  },
+  {
+   "language": "python",
+   "n": 158,
+   "pct": 51.77
+  },
+  {
+   "language": "rust",
+   "n": 2,
+   "pct": 86.87
+  }
+ ],
+ "scatter": [
+  {
+   "task": "abishekvashok__cmatrix.5c082c6",
+   "delta_py_rust": 2.959,
+   "delta_py_ts": -0.197,
+   "scale_loc": 316.0,
+   "n_tests": 507,
+   "difficulty": 95.958
+  },
+  {
+   "task": "agourlay__zip-password-finder.704700d",
+   "delta_py_rust": -11.177,
+   "delta_py_ts": -9.265,
+   "scale_loc": 345.0,
+   "n_tests": 680,
+   "difficulty": 58.857
+  },
+  {
+   "task": "ajeetdsouza__zoxide.67ca1bc",
+   "delta_py_rust": 10.17,
+   "delta_py_ts": 0.377,
+   "scale_loc": 489.0,
+   "n_tests": 531,
+   "difficulty": 58.412
+  },
+  {
+   "task": "alexpovel__srgn.89f943b",
+   "delta_py_rust": -5.885,
+   "delta_py_ts": 3.132,
+   "scale_loc": 548.0,
+   "n_tests": 1852,
+   "difficulty": 57.487
+  },
+  {
+   "task": "altdesktop__i3-style.f93821b",
+   "delta_py_rust": -17.254,
+   "delta_py_ts": 10.761,
+   "scale_loc": 353.0,
+   "n_tests": 539,
+   "difficulty": 60.946
+  },
+  {
+   "task": "ammarabouzor__tui-journal.2b4540d",
+   "delta_py_rust": 1.141,
+   "delta_py_ts": 6.063,
+   "scale_loc": 510.0,
+   "n_tests": 1402,
+   "difficulty": 60.937
+  },
+  {
+   "task": "anordal__shellharden.6a6ffd4",
+   "delta_py_rust": 0.365,
+   "delta_py_ts": 4.475,
+   "scale_loc": 384.0,
+   "n_tests": 1095,
+   "difficulty": 72.374
+  },
+  {
+   "task": "antonmedv__fx.86d0d34",
+   "delta_py_rust": 1.514,
+   "delta_py_ts": -13.239,
+   "scale_loc": 389.0,
+   "n_tests": 2047,
+   "difficulty": 56.831
+  },
+  {
+   "task": "antonmedv__walk.bf802ef",
+   "delta_py_rust": 0.0,
+   "delta_py_ts": -5.745,
+   "scale_loc": 363.0,
+   "n_tests": 470,
+   "difficulty": 56.702
+  },
+  {
+   "task": "ariga__atlas.6d81150",
+   "delta_py_rust": 5.311,
+   "delta_py_ts": 3.187,
+   "scale_loc": 576.0,
+   "n_tests": 1318,
+   "difficulty": 45.802
+  },
+  {
+   "task": "arq5x__bedtools2.dd57059",
+   "delta_py_rust": 13.675,
+   "delta_py_ts": 11.396,
+   "scale_loc": 295.0,
+   "n_tests": 1053,
+   "difficulty": 26.163
+  },
+  {
+   "task": "arthursonzogni__json-tui.17a22b6",
+   "delta_py_rust": -19.47,
+   "delta_py_ts": -30.993,
+   "scale_loc": 322.0,
+   "n_tests": 755,
+   "difficulty": 65.651
+  },
+  {
+   "task": "ast-grep__ast-grep.dde0fe0",
+   "delta_py_rust": 0.794,
+   "delta_py_ts": -1.701,
+   "scale_loc": 550.0,
+   "n_tests": 882,
+   "difficulty": 10.847
+  },
+  {
+   "task": "astaxie__bat.17d1080",
+   "delta_py_rust": -11.457,
+   "delta_py_ts": 1.466,
+   "scale_loc": 355.0,
+   "n_tests": 1091,
+   "difficulty": 62.191
+  },
+  {
+   "task": "astro__deadnix.d590041",
+   "delta_py_rust": 29.734,
+   "delta_py_ts": 4.485,
+   "scale_loc": 406.0,
+   "n_tests": 602,
+   "difficulty": 69.934
+  },
+  {
+   "task": "axodotdev__oranda.27d60c7",
+   "delta_py_rust": -2.477,
+   "delta_py_ts": -7.04,
+   "scale_loc": 472.0,
+   "n_tests": 767,
+   "difficulty": 53.824
+  },
+  {
+   "task": "bellard__quickjs.d7ae12a",
+   "delta_py_rust": 0.692,
+   "delta_py_ts": -55.966,
+   "scale_loc": 431.0,
+   "n_tests": 3034,
+   "difficulty": 22.599
+  },
+  {
+   "task": "bensadeh__tailspin.6278437",
+   "delta_py_rust": -2.439,
+   "delta_py_ts": -6.016,
+   "scale_loc": 364.0,
+   "n_tests": 615,
+   "difficulty": 72.954
+  },
+  {
+   "task": "blacknon__hwatch.edfcb62",
+   "delta_py_rust": 2.067,
+   "delta_py_ts": -3.445,
+   "scale_loc": 304.0,
+   "n_tests": 1016,
+   "difficulty": 52.034
+  },
+  {
+   "task": "blake3-team__blake3.15e83a5",
+   "delta_py_rust": -2.782,
+   "delta_py_ts": -1.237,
+   "scale_loc": 589.0,
+   "n_tests": 647,
+   "difficulty": 86.656
+  },
+  {
+   "task": "bootandy__dust.62bf1e1",
+   "delta_py_rust": 4.623,
+   "delta_py_ts": -4.281,
+   "scale_loc": 671.0,
+   "n_tests": 584,
+   "difficulty": 58.961
+  },
+  {
+   "task": "boyter__scc.515f91c",
+   "delta_py_rust": 15.302,
+   "delta_py_ts": 19.612,
+   "scale_loc": 596.0,
+   "n_tests": 464,
+   "difficulty": 21.3
+  },
+  {
+   "task": "brocode__fblog.3b54330",
+   "delta_py_rust": 2.147,
+   "delta_py_ts": -0.818,
+   "scale_loc": 397.0,
+   "n_tests": 978,
+   "difficulty": 63.923
+  },
+  {
+   "task": "burntsushi__ripgrep.3b7fd44",
+   "delta_py_rust": -1.354,
+   "delta_py_ts": -0.351,
+   "scale_loc": 646.0,
+   "n_tests": 1994,
+   "difficulty": 57.64
+  },
+  {
+   "task": "burntsushi__xsv.f430466",
+   "delta_py_rust": 30.795,
+   "delta_py_ts": 32.403,
+   "scale_loc": 285.0,
+   "n_tests": 1182,
+   "difficulty": 46.94
+  },
+  {
+   "task": "byron__dua-cli.8570c15",
+   "delta_py_rust": 0.0,
+   "delta_py_ts": -3.526,
+   "scale_loc": 431.0,
+   "n_tests": 709,
+   "difficulty": 74.283
+  },
+  {
+   "task": "canop__broot.d6c798e",
+   "delta_py_rust": -2.041,
+   "delta_py_ts": 14.286,
+   "scale_loc": 445.0,
+   "n_tests": 539,
+   "difficulty": 52.628
+  },
+  {
+   "task": "canop__rhit.ae90bcb",
+   "delta_py_rust": 0.857,
+   "delta_py_ts": 4.162,
+   "scale_loc": 582.0,
+   "n_tests": 817,
+   "difficulty": 52.448
+  },
+  {
+   "task": "cheat__cheat.b8098dc",
+   "delta_py_rust": 1.347,
+   "delta_py_ts": 2.357,
+   "scale_loc": 605.0,
+   "n_tests": 297,
+   "difficulty": 48.204
+  },
+  {
+   "task": "chirlu__sox.42b3557",
+   "delta_py_rust": -0.083,
+   "delta_py_ts": -5.158,
+   "scale_loc": 584.0,
+   "n_tests": 1202,
+   "difficulty": 28.231
+  },
+  {
+   "task": "chmln__handlr.90e78ba",
+   "delta_py_rust": 4.017,
+   "delta_py_ts": 8.033,
+   "scale_loc": 392.0,
+   "n_tests": 722,
+   "difficulty": 75.369
+  },
+  {
+   "task": "chmln__sd.87d1ba5",
+   "delta_py_rust": -10.247,
+   "delta_py_ts": -3.333,
+   "scale_loc": 355.0,
+   "n_tests": 810,
+   "difficulty": 82.942
+  },
+  {
+   "task": "clog-tool__clog-cli.7066cba",
+   "delta_py_rust": -37.217,
+   "delta_py_ts": -28.348,
+   "scale_loc": 385.0,
+   "n_tests": 575,
+   "difficulty": 65.275
+  },
+  {
+   "task": "cmatsuoka__figlet.202a0a8",
+   "delta_py_rust": -22.821,
+   "delta_py_ts": -2.179,
+   "scale_loc": 518.0,
+   "n_tests": 872,
+   "difficulty": 48.165
+  },
+  {
+   "task": "codesnap-rs__codesnap.f81e4f3",
+   "delta_py_rust": 11.384,
+   "delta_py_ts": 19.265,
+   "scale_loc": 483.0,
+   "n_tests": 571,
+   "difficulty": 58.757
+  },
+  {
+   "task": "cordx56__rustowl.655bc5c",
+   "delta_py_rust": -3.905,
+   "delta_py_ts": -4.414,
+   "scale_loc": 358.0,
+   "n_tests": 589,
+   "difficulty": 50.028
+  },
+  {
+   "task": "crowdagger__crowbook.ea214d7",
+   "delta_py_rust": -5.7,
+   "delta_py_ts": 0.867,
+   "scale_loc": 612.0,
+   "n_tests": 807,
+   "difficulty": 38.187
+  },
+  {
+   "task": "cslarsen__jp2a.61d205f",
+   "delta_py_rust": 24.881,
+   "delta_py_ts": 3.17,
+   "scale_loc": 372.0,
+   "n_tests": 631,
+   "difficulty": 38.906
+  },
+  {
+   "task": "cweill__gotests.2a672c5",
+   "delta_py_rust": -1.824,
+   "delta_py_ts": -0.166,
+   "scale_loc": 536.0,
+   "n_tests": 603,
+   "difficulty": 32.117
+  },
+  {
+   "task": "dalance__amber.69a0f52",
+   "delta_py_rust": -49.204,
+   "delta_py_ts": -42.301,
+   "scale_loc": 452.0,
+   "n_tests": 565,
+   "difficulty": 52.183
+  },
+  {
+   "task": "dandavison__delta.acd758f",
+   "delta_py_rust": 2.421,
+   "delta_py_ts": 0.21,
+   "scale_loc": 400.0,
+   "n_tests": 950,
+   "difficulty": 24.088
+  },
+  {
+   "task": "danmar__cppcheck.0a5b103",
+   "delta_py_rust": -4.422,
+   "delta_py_ts": -6.679,
+   "scale_loc": 491.0,
+   "n_tests": 2126,
+   "difficulty": 14.848
+  },
+  {
+   "task": "direnv__direnv.02040c7",
+   "delta_py_rust": 2.827,
+   "delta_py_ts": -6.243,
+   "scale_loc": 476.0,
+   "n_tests": 849,
+   "difficulty": 46.584
+  },
+  {
+   "task": "doxygen__doxygen.966d98e",
+   "delta_py_rust": -5.677,
+   "delta_py_ts": -5.677,
+   "scale_loc": 478.0,
+   "n_tests": 229,
+   "difficulty": 30.932
+  },
+  {
+   "task": "drew-alleman__datasurgeon.d257cee",
+   "delta_py_rust": 1.195,
+   "delta_py_ts": 4.98,
+   "scale_loc": 254.0,
+   "n_tests": 502,
+   "difficulty": 56.574
+  },
+  {
+   "task": "ducaale__xh.4a6e44f",
+   "delta_py_rust": 10.675,
+   "delta_py_ts": 1.452,
+   "scale_loc": 470.0,
+   "n_tests": 1171,
+   "difficulty": 32.636
+  },
+  {
+   "task": "duckdb__duckdb.bdb65ec",
+   "delta_py_rust": -0.903,
+   "delta_py_ts": 5.735,
+   "scale_loc": 632.0,
+   "n_tests": 5650,
+   "difficulty": 6.142
+  },
+  {
+   "task": "dundee__gdu.ede21d2",
+   "delta_py_rust": 9.13,
+   "delta_py_ts": 1.292,
+   "scale_loc": 452.0,
+   "n_tests": 1161,
+   "difficulty": 60.48
+  },
+  {
+   "task": "ecumene__rust-sloth.051c559",
+   "delta_py_rust": 2.895,
+   "delta_py_ts": -5.526,
+   "scale_loc": 341.0,
+   "n_tests": 380,
+   "difficulty": 50.175
+  },
+  {
+   "task": "ekzhang__bore.8e059cd",
+   "delta_py_rust": -14.721,
+   "delta_py_ts": -8.122,
+   "scale_loc": 337.0,
+   "n_tests": 394,
+   "difficulty": 38.029
+  },
+  {
+   "task": "elkowar__pipr.fae0b17",
+   "delta_py_rust": -1.714,
+   "delta_py_ts": -16.19,
+   "scale_loc": 326.0,
+   "n_tests": 525,
+   "difficulty": 48.036
+  },
+  {
+   "task": "epistates__treemd.825c6dd",
+   "delta_py_rust": -0.446,
+   "delta_py_ts": -3.187,
+   "scale_loc": 544.0,
+   "n_tests": 1569,
+   "difficulty": 36.679
+  },
+  {
+   "task": "eradman__entr.8e2e8b4",
+   "delta_py_rust": -31.741,
+   "delta_py_ts": 1.024,
+   "scale_loc": 383.0,
+   "n_tests": 586,
+   "difficulty": 61.945
+  },
+  {
+   "task": "esubaalew__run.0fb9dec",
+   "delta_py_rust": -24.422,
+   "delta_py_ts": -23.102,
+   "scale_loc": 274.0,
+   "n_tests": 1212,
+   "difficulty": 32.929
+  },
+  {
+   "task": "eudoxia0__hashcards.48aa136",
+   "delta_py_rust": -1.668,
+   "delta_py_ts": 4.612,
+   "scale_loc": 392.0,
+   "n_tests": 1019,
+   "difficulty": 68.433
+  },
+  {
+   "task": "facebook__zstd.1168da0",
+   "delta_py_rust": 9.274,
+   "delta_py_ts": 1.668,
+   "scale_loc": 382.0,
+   "n_tests": 2038,
+   "difficulty": 38.963
+  },
+  {
+   "task": "facebookresearch__fasttext.1142dc4",
+   "delta_py_rust": 4.167,
+   "delta_py_ts": 2.885,
+   "scale_loc": 497.0,
+   "n_tests": 312,
+   "difficulty": 44.07
+  },
+  {
+   "task": "ffmpeg__ffmpeg.360a402",
+   "delta_py_rust": -2.59,
+   "delta_py_ts": -0.328,
+   "scale_loc": 504.0,
+   "n_tests": 3050,
+   "difficulty": 6.306
+  },
+  {
+   "task": "filosottile__age.706dfc1",
+   "delta_py_rust": 9.615,
+   "delta_py_ts": 1.775,
+   "scale_loc": 413.0,
+   "n_tests": 676,
+   "difficulty": 23.989
+  },
+  {
+   "task": "foriequal0__git-trim.07c2f50",
+   "delta_py_rust": 9.234,
+   "delta_py_ts": -6.876,
+   "scale_loc": 531.0,
+   "n_tests": 509,
+   "difficulty": 50.36
+  },
+  {
+   "task": "gabotechs__dep-tree.60a95a2",
+   "delta_py_rust": -10.636,
+   "delta_py_ts": 6.012,
+   "scale_loc": 570.0,
+   "n_tests": 865,
+   "difficulty": 58.381
+  },
+  {
+   "task": "git-bahn__git-graph.87b4473",
+   "delta_py_rust": 3.521,
+   "delta_py_ts": 3.521,
+   "scale_loc": 451.0,
+   "n_tests": 568,
+   "difficulty": 72.183
+  },
+  {
+   "task": "go-critic__go-critic.9aea378",
+   "delta_py_rust": 21.907,
+   "delta_py_ts": 9.331,
+   "scale_loc": 426.0,
+   "n_tests": 493,
+   "difficulty": 25.456
+  },
+  {
+   "task": "google__brotli.b3dc9cc",
+   "delta_py_rust": 0.227,
+   "delta_py_ts": -0.227,
+   "scale_loc": 373.0,
+   "n_tests": 441,
+   "difficulty": 6.803
+  },
+  {
+   "task": "gromacs__gromacs.665ea4c",
+   "delta_py_rust": 0.0,
+   "delta_py_ts": -0.241,
+   "scale_loc": 480.0,
+   "n_tests": 1245,
+   "difficulty": 2.316
+  },
+  {
+   "task": "guumaster__hostctl.d6d9699",
+   "delta_py_rust": -5.47,
+   "delta_py_ts": -8.372,
+   "scale_loc": 513.0,
+   "n_tests": 1063,
+   "difficulty": 52.079
+  },
+  {
+   "task": "hairyhenderson__gomplate.05eb3aa",
+   "delta_py_rust": 9.945,
+   "delta_py_ts": 19.583,
+   "scale_loc": 765.0,
+   "n_tests": 2926,
+   "difficulty": 44.446
+  },
+  {
+   "task": "halitechallenge__halite.822cfb6",
+   "delta_py_rust": 48.0,
+   "delta_py_ts": 7.636,
+   "scale_loc": 448.0,
+   "n_tests": 275,
+   "difficulty": 52.303
+  },
+  {
+   "task": "hatoo__oha.8dc6349",
+   "delta_py_rust": 3.671,
+   "delta_py_ts": 2.002,
+   "scale_loc": 425.0,
+   "n_tests": 899,
+   "difficulty": 61.146
+  },
+  {
+   "task": "hooklift__gowsdl.2a06cec",
+   "delta_py_rust": 7.161,
+   "delta_py_ts": 9.463,
+   "scale_loc": 406.0,
+   "n_tests": 391,
+   "difficulty": 66.113
+  },
+  {
+   "task": "hpjansson__chafa.dd4d4c1",
+   "delta_py_rust": -2.175,
+   "delta_py_ts": -5.438,
+   "scale_loc": 493.0,
+   "n_tests": 1931,
+   "difficulty": 13.344
+  },
+  {
+   "task": "htop-dev__htop.523600b",
+   "delta_py_rust": -18.759,
+   "delta_py_ts": -11.833,
+   "scale_loc": 453.0,
+   "n_tests": 693,
+   "difficulty": 83.237
+  },
+  {
+   "task": "hush-shell__hush.560c33a",
+   "delta_py_rust": -13.156,
+   "delta_py_ts": -1.749,
+   "scale_loc": 440.0,
+   "n_tests": 1201,
+   "difficulty": 10.089
+  },
+  {
+   "task": "incu6us__goimports-reviser.81bd549",
+   "delta_py_rust": -11.891,
+   "delta_py_ts": -13.84,
+   "scale_loc": 397.0,
+   "n_tests": 513,
+   "difficulty": 56.173
+  },
+  {
+   "task": "ip7z__7zip.839151e",
+   "delta_py_rust": 1.63,
+   "delta_py_ts": -0.383,
+   "scale_loc": 436.0,
+   "n_tests": 1043,
+   "difficulty": 26.718
+  },
+  {
+   "task": "ismaelgv__rnr.fc0733b",
+   "delta_py_rust": -16.252,
+   "delta_py_ts": -9.81,
+   "scale_loc": 465.0,
+   "n_tests": 683,
+   "difficulty": 71.84
+  },
+  {
+   "task": "isona__dirble.e2dea9f",
+   "delta_py_rust": 7.521,
+   "delta_py_ts": -3.203,
+   "scale_loc": 472.0,
+   "n_tests": 718,
+   "difficulty": 61.305
+  },
+  {
+   "task": "ivanceras__svgbob.6d00ad9",
+   "delta_py_rust": 2.754,
+   "delta_py_ts": 0.848,
+   "scale_loc": 413.0,
+   "n_tests": 472,
+   "difficulty": 33.333
+  },
+  {
+   "task": "jarun__nnn.cb2c535",
+   "delta_py_rust": -18.868,
+   "delta_py_ts": 5.786,
+   "scale_loc": 225.0,
+   "n_tests": 477,
+   "difficulty": 75.351
+  },
+  {
+   "task": "jesseduffield__lazygit.1d0db51",
+   "delta_py_rust": 2.924,
+   "delta_py_ts": -11.345,
+   "scale_loc": 222.0,
+   "n_tests": 855,
+   "difficulty": 38.752
+  },
+  {
+   "task": "jgm__pandoc.5caad90",
+   "delta_py_rust": 0.574,
+   "delta_py_ts": -0.784,
+   "scale_loc": 600.0,
+   "n_tests": 5228,
+   "difficulty": 10.728
+  },
+  {
+   "task": "jhspetersson__fselect.c3559ca",
+   "delta_py_rust": -36.469,
+   "delta_py_ts": -38.812,
+   "scale_loc": 515.0,
+   "n_tests": 3115,
+   "difficulty": 38.801
+  },
+  {
+   "task": "johanneskaufmann__html-to-markdown.3006818",
+   "delta_py_rust": -2.373,
+   "delta_py_ts": 16.497,
+   "scale_loc": 473.0,
+   "n_tests": 885,
+   "difficulty": 68.588
+  },
+  {
+   "task": "johnkerl__miller.8d85b46",
+   "delta_py_rust": 1.107,
+   "delta_py_ts": 2.009,
+   "scale_loc": 532.0,
+   "n_tests": 14637,
+   "difficulty": 16.882
+  },
+  {
+   "task": "jonas__tig.8334123",
+   "delta_py_rust": -0.252,
+   "delta_py_ts": 0.757,
+   "scale_loc": 177.0,
+   "n_tests": 1586,
+   "difficulty": 83.596
+  },
+  {
+   "task": "jqlang__jq.b33a763",
+   "delta_py_rust": 14.97,
+   "delta_py_ts": 9.783,
+   "scale_loc": 571.0,
+   "n_tests": 6072,
+   "difficulty": 32.093
+  },
+  {
+   "task": "jrnxf__thokr.09375ef",
+   "delta_py_rust": 3.146,
+   "delta_py_ts": -4.045,
+   "scale_loc": 374.0,
+   "n_tests": 445,
+   "difficulty": 67.603
+  },
+  {
+   "task": "junegunn__fzf.b56d614",
+   "delta_py_rust": 1.13,
+   "delta_py_ts": -0.807,
+   "scale_loc": 525.0,
+   "n_tests": 1858,
+   "difficulty": 73.493
+  },
+  {
+   "task": "kaushiksrini__parqeye.8072121",
+   "delta_py_rust": -8.56,
+   "delta_py_ts": -12.108,
+   "scale_loc": 427.0,
+   "n_tests": 479,
+   "difficulty": 47.773
+  },
+  {
+   "task": "kisielk__errcheck.dacab89",
+   "delta_py_rust": 19.941,
+   "delta_py_ts": -2.933,
+   "scale_loc": 437.0,
+   "n_tests": 341,
+   "difficulty": 32.502
+  },
+  {
+   "task": "konradsz__igrep.aa75630",
+   "delta_py_rust": 1.818,
+   "delta_py_ts": 2.597,
+   "scale_loc": 330.0,
+   "n_tests": 385,
+   "difficulty": 71.299
+  },
+  {
+   "task": "ksxgithub__parallel-disk-usage.96978ed",
+   "delta_py_rust": 0.565,
+   "delta_py_ts": 0.377,
+   "scale_loc": 399.0,
+   "n_tests": 531,
+   "difficulty": 66.981
+  },
+  {
+   "task": "kyoh86__richgo.313114f",
+   "delta_py_rust": -2.93,
+   "delta_py_ts": -14.469,
+   "scale_loc": 211.0,
+   "n_tests": 546,
+   "difficulty": 65.812
+  },
+  {
+   "task": "kyoheiu__felix.95df390",
+   "delta_py_rust": 4.582,
+   "delta_py_ts": -2.59,
+   "scale_loc": 443.0,
+   "n_tests": 502,
+   "difficulty": 50.332
+  },
+  {
+   "task": "lfos__calcurse.49180d5",
+   "delta_py_rust": 0.601,
+   "delta_py_ts": 20.721,
+   "scale_loc": 612.0,
+   "n_tests": 666,
+   "difficulty": 45.546
+  },
+  {
+   "task": "lh3__seqtk.94e7070",
+   "delta_py_rust": 3.73,
+   "delta_py_ts": 4.895,
+   "scale_loc": 463.0,
+   "n_tests": 429,
+   "difficulty": 48.213
+  },
+  {
+   "task": "lua__lua.c6b4848",
+   "delta_py_rust": 4.335,
+   "delta_py_ts": -8.894,
+   "scale_loc": 293.0,
+   "n_tests": 1338,
+   "difficulty": 34.18
+  },
+  {
+   "task": "luajit__luajit.a553b3d",
+   "delta_py_rust": 6.539,
+   "delta_py_ts": -4.146,
+   "scale_loc": 176.0,
+   "n_tests": 2967,
+   "difficulty": 32.44
+  },
+  {
+   "task": "lymphatus__caesium-clt.a529b2e",
+   "delta_py_rust": 10.087,
+   "delta_py_ts": 14.087,
+   "scale_loc": 519.0,
+   "n_tests": 575,
+   "difficulty": 74.058
+  },
+  {
+   "task": "lz4__lz4.1519f46",
+   "delta_py_rust": 23.062,
+   "delta_py_ts": 1.203,
+   "scale_loc": 433.0,
+   "n_tests": 1496,
+   "difficulty": 71.97
+  },
+  {
+   "task": "madler__pigz.fe4894f",
+   "delta_py_rust": 5.054,
+   "delta_py_ts": 6.017,
+   "scale_loc": 461.0,
+   "n_tests": 831,
+   "difficulty": 81.428
+  },
+  {
+   "task": "mfridman__tparse.2416b4b",
+   "delta_py_rust": -6.118,
+   "delta_py_ts": -5.412,
+   "scale_loc": 374.0,
+   "n_tests": 425,
+   "difficulty": 67.216
+  },
+  {
+   "task": "mgdm__htmlq.6e31bc8",
+   "delta_py_rust": 1.237,
+   "delta_py_ts": 0.275,
+   "scale_loc": 388.0,
+   "n_tests": 1455,
+   "difficulty": 88.935
+  },
+  {
+   "task": "mgechev__revive.201451e",
+   "delta_py_rust": 13.067,
+   "delta_py_ts": -0.413,
+   "scale_loc": 551.0,
+   "n_tests": 727,
+   "difficulty": 17.95
+  },
+  {
+   "task": "mibk__dupl.1bf052b",
+   "delta_py_rust": 5.898,
+   "delta_py_ts": 1.072,
+   "scale_loc": 367.0,
+   "n_tests": 373,
+   "difficulty": 70.956
+  },
+  {
+   "task": "mikefarah__yq.602586d",
+   "delta_py_rust": 6.05,
+   "delta_py_ts": 1.8,
+   "scale_loc": 682.0,
+   "n_tests": 2000,
+   "difficulty": 17.05
+  },
+  {
+   "task": "miserlou__loop.209927c",
+   "delta_py_rust": 14.93,
+   "delta_py_ts": 22.254,
+   "scale_loc": 331.0,
+   "n_tests": 710,
+   "difficulty": 63.239
+  },
+  {
+   "task": "mkj__dropbear.75f699b",
+   "delta_py_rust": 0.59,
+   "delta_py_ts": -19.027,
+   "scale_loc": 309.0,
+   "n_tests": 678,
+   "difficulty": 41.052
+  },
+  {
+   "task": "mookid__diffr.2152742",
+   "delta_py_rust": -9.901,
+   "delta_py_ts": 2.475,
+   "scale_loc": 445.0,
+   "n_tests": 606,
+   "difficulty": 66.062
+  },
+  {
+   "task": "nachoparker__dutree.44e877d",
+   "delta_py_rust": -4.836,
+   "delta_py_ts": 23.713,
+   "scale_loc": 269.0,
+   "n_tests": 641,
+   "difficulty": 55.408
+  },
+  {
+   "task": "naggie__dstask.ff57396",
+   "delta_py_rust": 2.269,
+   "delta_py_ts": 2.973,
+   "scale_loc": 520.0,
+   "n_tests": 1278,
+   "difficulty": 52.243
+  },
+  {
+   "task": "nikoladucak__caps-log.2cf2d1e",
+   "delta_py_rust": -11.252,
+   "delta_py_ts": -6.171,
+   "scale_loc": 384.0,
+   "n_tests": 551,
+   "difficulty": 45.402
+  },
+  {
+   "task": "nikolassv__bartib.6b9b5ce",
+   "delta_py_rust": 8.31,
+   "delta_py_ts": 3.74,
+   "scale_loc": 577.0,
+   "n_tests": 722,
+   "difficulty": 59.534
+  },
+  {
+   "task": "ninja-build__ninja.cc60300",
+   "delta_py_rust": -8.484,
+   "delta_py_ts": 1.391,
+   "scale_loc": 713.0,
+   "n_tests": 1438,
+   "difficulty": 51.518
+  },
+  {
+   "task": "noborus__ov.b96c2ba",
+   "delta_py_rust": 0.108,
+   "delta_py_ts": 2.589,
+   "scale_loc": 364.0,
+   "n_tests": 1854,
+   "difficulty": 69.247
+  },
+  {
+   "task": "noborus__trdsql.d8c5ff6",
+   "delta_py_rust": 16.768,
+   "delta_py_ts": 13.338,
+   "scale_loc": 544.0,
+   "n_tests": 1312,
+   "difficulty": 44.715
+  },
+  {
+   "task": "nukesor__pueue.8b9d6fe",
+   "delta_py_rust": 7.367,
+   "delta_py_ts": 0.47,
+   "scale_loc": 481.0,
+   "n_tests": 638,
+   "difficulty": 12.879
+  },
+  {
+   "task": "nuta__nsh.bdd0702",
+   "delta_py_rust": 15.741,
+   "delta_py_ts": 0.815,
+   "scale_loc": 232.0,
+   "n_tests": 1963,
+   "difficulty": 79.411
+  },
+  {
+   "task": "o2sh__onefetch.e5958ce",
+   "delta_py_rust": 2.744,
+   "delta_py_ts": 6.004,
+   "scale_loc": 439.0,
+   "n_tests": 1166,
+   "difficulty": 59.863
+  },
+  {
+   "task": "ogham__dog.721440b",
+   "delta_py_rust": 5.154,
+   "delta_py_ts": 3.923,
+   "scale_loc": 414.0,
+   "n_tests": 1300,
+   "difficulty": 56.449
+  },
+  {
+   "task": "oppiliappan__eva.41ae245",
+   "delta_py_rust": -7.01,
+   "delta_py_ts": -6.134,
+   "scale_loc": 389.0,
+   "n_tests": 913,
+   "difficulty": 73.841
+  },
+  {
+   "task": "oppiliappan__statix.e9df54c",
+   "delta_py_rust": 16.074,
+   "delta_py_ts": 4.417,
+   "scale_loc": 427.0,
+   "n_tests": 815,
+   "difficulty": 49.141
+  },
+  {
+   "task": "orf__gping.26eb5b9",
+   "delta_py_rust": -5.015,
+   "delta_py_ts": 10.324,
+   "scale_loc": 313.0,
+   "n_tests": 339,
+   "difficulty": 60.079
+  },
+  {
+   "task": "osgeo__gdal.0847f12",
+   "delta_py_rust": 2.435,
+   "delta_py_ts": 1.979,
+   "scale_loc": 678.0,
+   "n_tests": 657,
+   "difficulty": 12.278
+  },
+  {
+   "task": "osgeo__proj.75d455c",
+   "delta_py_rust": 1.015,
+   "delta_py_ts": -0.921,
+   "scale_loc": 460.0,
+   "n_tests": 5319,
+   "difficulty": 15.792
+  },
+  {
+   "task": "paradigmxyz__solar.5190d0e",
+   "delta_py_rust": -0.91,
+   "delta_py_ts": -0.152,
+   "scale_loc": 526.0,
+   "n_tests": 1978,
+   "difficulty": 37.85
+  },
+  {
+   "task": "parcel-bundler__lightningcss.aa2ed1e",
+   "delta_py_rust": 15.17,
+   "delta_py_ts": 3.536,
+   "scale_loc": 555.0,
+   "n_tests": 2828,
+   "difficulty": 41.042
+  },
+  {
+   "task": "peco__peco.4e58dad",
+   "delta_py_rust": 35.703,
+   "delta_py_ts": 31.646,
+   "scale_loc": 355.0,
+   "n_tests": 1224,
+   "difficulty": 47.762
+  },
+  {
+   "task": "pemistahl__grex.fa3e8ed",
+   "delta_py_rust": 16.235,
+   "delta_py_ts": 0.838,
+   "scale_loc": 466.0,
+   "n_tests": 1312,
+   "difficulty": 66.298
+  },
+  {
+   "task": "php__php-src.c891263",
+   "delta_py_rust": -3.535,
+   "delta_py_ts": -1.302,
+   "scale_loc": 414.0,
+   "n_tests": 14288,
+   "difficulty": 3.159
+  },
+  {
+   "task": "pier-cli__pier.5e1bde9",
+   "delta_py_rust": -9.682,
+   "delta_py_ts": 5.925,
+   "scale_loc": 474.0,
+   "n_tests": 692,
+   "difficulty": 66.474
+  },
+  {
+   "task": "pls-rs__pls.4e1ae50",
+   "delta_py_rust": 16.868,
+   "delta_py_ts": 8.434,
+   "scale_loc": 524.0,
+   "n_tests": 332,
+   "difficulty": 30.02
+  },
+  {
+   "task": "psampaz__go-mod-outdated.bb79367",
+   "delta_py_rust": -1.053,
+   "delta_py_ts": -2.807,
+   "scale_loc": 238.0,
+   "n_tests": 285,
+   "difficulty": 71.637
+  },
+  {
+   "task": "quinn-rs__quinn.bb359cc",
+   "delta_py_rust": -8.812,
+   "delta_py_ts": 5.364,
+   "scale_loc": 573.0,
+   "n_tests": 522,
+   "difficulty": 54.725
+  },
+  {
+   "task": "raviqqe__muffet.a882908",
+   "delta_py_rust": 5.461,
+   "delta_py_ts": -2.389,
+   "scale_loc": 496.0,
+   "n_tests": 293,
+   "difficulty": 75.54
+  },
+  {
+   "task": "rbakbashev__elfcat.52f8cc7",
+   "delta_py_rust": 2.482,
+   "delta_py_ts": 30.851,
+   "scale_loc": 513.0,
+   "n_tests": 564,
+   "difficulty": 51.655
+  },
+  {
+   "task": "rcoh__angle-grinder.9c2fc88",
+   "delta_py_rust": -0.177,
+   "delta_py_ts": -12.655,
+   "scale_loc": 758.0,
+   "n_tests": 1130,
+   "difficulty": 29.233
+  },
+  {
+   "task": "rhysd__kiro-editor.4157485",
+   "delta_py_rust": 2.689,
+   "delta_py_ts": 7.731,
+   "scale_loc": 501.0,
+   "n_tests": 595,
+   "difficulty": 67.787
+  },
+  {
+   "task": "riquito__tuc.16fb471",
+   "delta_py_rust": 2.007,
+   "delta_py_ts": 23.244,
+   "scale_loc": 371.0,
+   "n_tests": 1196,
+   "difficulty": 71.098
+  },
+  {
+   "task": "robertdavidgraham__masscan.b99d433",
+   "delta_py_rust": -5.806,
+   "delta_py_ts": 6.316,
+   "scale_loc": 453.0,
+   "n_tests": 2549,
+   "difficulty": 49.876
+  },
+  {
+   "task": "rochacbruno__marmite.7d4bc2d",
+   "delta_py_rust": -2.695,
+   "delta_py_ts": -2.395,
+   "scale_loc": 554.0,
+   "n_tests": 668,
+   "difficulty": 40.594
+  },
+  {
+   "task": "rs__curlie.5dfcbb1",
+   "delta_py_rust": 4.565,
+   "delta_py_ts": 1.427,
+   "scale_loc": 281.0,
+   "n_tests": 701,
+   "difficulty": 74.941
+  },
+  {
+   "task": "rs__jplot.2a54bcc",
+   "delta_py_rust": 0.0,
+   "delta_py_ts": 0.172,
+   "scale_loc": 292.0,
+   "n_tests": 583,
+   "difficulty": 47.599
+  },
+  {
+   "task": "rust-embedded__svd2rust.1760b5e",
+   "delta_py_rust": -5.435,
+   "delta_py_ts": -2.283,
+   "scale_loc": 663.0,
+   "n_tests": 920,
+   "difficulty": 58.46
+  },
+  {
+   "task": "rust-ethereum__ethabi.b1710ad",
+   "delta_py_rust": -9.529,
+   "delta_py_ts": -8.024,
+   "scale_loc": 568.0,
+   "n_tests": 997,
+   "difficulty": 67.536
+  },
+  {
+   "task": "rust-lang__mdbook.37273ba",
+   "delta_py_rust": 6.733,
+   "delta_py_ts": 0.628,
+   "scale_loc": 706.0,
+   "n_tests": 1114,
+   "difficulty": 45.871
+  },
+  {
+   "task": "rvben__rumdl.2d75c4d",
+   "delta_py_rust": 12.553,
+   "delta_py_ts": -8.73,
+   "scale_loc": 523.0,
+   "n_tests": 3322,
+   "difficulty": 29.555
+  },
+  {
+   "task": "samtools__samtools.aa823b5",
+   "delta_py_rust": 2.667,
+   "delta_py_ts": 2.596,
+   "scale_loc": 585.0,
+   "n_tests": 1425,
+   "difficulty": 17.357
+  },
+  {
+   "task": "sayanarijit__xplr.1751065",
+   "delta_py_rust": 6.444,
+   "delta_py_ts": 0.955,
+   "scale_loc": 354.0,
+   "n_tests": 419,
+   "difficulty": 51.87
+  },
+  {
+   "task": "sclevine__yj.8016400",
+   "delta_py_rust": 7.562,
+   "delta_py_ts": 5.867,
+   "scale_loc": 466.0,
+   "n_tests": 767,
+   "difficulty": 55.324
+  },
+  {
+   "task": "segmentio__chamber.5f93f5f",
+   "delta_py_rust": 10.126,
+   "delta_py_ts": 3.433,
+   "scale_loc": 212.0,
+   "n_tests": 1748,
+   "difficulty": 65.16
+  },
+  {
+   "task": "sharkdp__bat.f822bd0",
+   "delta_py_rust": 29.787,
+   "delta_py_ts": 27.66,
+   "scale_loc": 609.0,
+   "n_tests": 799,
+   "difficulty": 30.288
+  },
+  {
+   "task": "sharkdp__fd.40d8eb3",
+   "delta_py_rust": 3.968,
+   "delta_py_ts": 1.134,
+   "scale_loc": 546.0,
+   "n_tests": 1235,
+   "difficulty": 73.499
+  },
+  {
+   "task": "sharkdp__hexyl.2e26437",
+   "delta_py_rust": 4.084,
+   "delta_py_ts": -3.422,
+   "scale_loc": 437.0,
+   "n_tests": 906,
+   "difficulty": 61.553
+  },
+  {
+   "task": "sharkdp__pastel.b60e899",
+   "delta_py_rust": -0.718,
+   "delta_py_ts": 8.348,
+   "scale_loc": 224.0,
+   "n_tests": 1114,
+   "difficulty": 65.545
+  },
+  {
+   "task": "shashwatah__jot.a92aad8",
+   "delta_py_rust": -5.452,
+   "delta_py_ts": 3.856,
+   "scale_loc": 482.0,
+   "n_tests": 752,
+   "difficulty": 78.28
+  },
+  {
+   "task": "sheepla__pingu.926d475",
+   "delta_py_rust": 3.394,
+   "delta_py_ts": 2.872,
+   "scale_loc": 251.0,
+   "n_tests": 383,
+   "difficulty": 79.504
+  },
+  {
+   "task": "sibprogrammer__xq.b89f681",
+   "delta_py_rust": -1.01,
+   "delta_py_ts": -8.081,
+   "scale_loc": 431.0,
+   "n_tests": 792,
+   "difficulty": 66.456
+  },
+  {
+   "task": "sigoden__argc.04a08f1",
+   "delta_py_rust": -2.111,
+   "delta_py_ts": -1.206,
+   "scale_loc": 556.0,
+   "n_tests": 995,
+   "difficulty": 13.484
+  },
+  {
+   "task": "simeg__eureka.df3796c",
+   "delta_py_rust": -5.523,
+   "delta_py_ts": 3.779,
+   "scale_loc": 238.0,
+   "n_tests": 344,
+   "difficulty": 61.531
+  },
+  {
+   "task": "sirwart__ripsecrets.34c9e03",
+   "delta_py_rust": -0.164,
+   "delta_py_ts": -1.473,
+   "scale_loc": 329.0,
+   "n_tests": 611,
+   "difficulty": 63.284
+  },
+  {
+   "task": "sitkevij__hex.61ae69b",
+   "delta_py_rust": -20.535,
+   "delta_py_ts": -3.159,
+   "scale_loc": 272.0,
+   "n_tests": 823,
+   "difficulty": 71.547
+  },
+  {
+   "task": "skeema__skeema.6a76243",
+   "delta_py_rust": -10.187,
+   "delta_py_ts": 0.351,
+   "scale_loc": 352.0,
+   "n_tests": 1708,
+   "difficulty": 54.908
+  },
+  {
+   "task": "sqlite__sqlite.839433d",
+   "delta_py_rust": 0.133,
+   "delta_py_ts": -7.762,
+   "scale_loc": 783.0,
+   "n_tests": 13514,
+   "difficulty": 1.935
+  },
+  {
+   "task": "sstadick__hck.b66c751",
+   "delta_py_rust": -0.468,
+   "delta_py_ts": 2.573,
+   "scale_loc": 356.0,
+   "n_tests": 855,
+   "difficulty": 87.739
+  },
+  {
+   "task": "stacked-git__stgit.430027d",
+   "delta_py_rust": 3.631,
+   "delta_py_ts": 13.983,
+   "scale_loc": 459.0,
+   "n_tests": 1505,
+   "difficulty": 29.115
+  },
+  {
+   "task": "stranger6667__jsonschema.d52e881",
+   "delta_py_rust": 3.955,
+   "delta_py_ts": 4.398,
+   "scale_loc": 536.0,
+   "n_tests": 2933,
+   "difficulty": 45.568
+  },
+  {
+   "task": "svenstaro__genact.16f96e3",
+   "delta_py_rust": 4.741,
+   "delta_py_ts": 0.862,
+   "scale_loc": 343.0,
+   "n_tests": 232,
+   "difficulty": 23.491
+  },
+  {
+   "task": "svenstaro__miniserve.8449e8b",
+   "delta_py_rust": 0.0,
+   "delta_py_ts": -3.29,
+   "scale_loc": 734.0,
+   "n_tests": 304,
+   "difficulty": 69.627
+  },
+  {
+   "task": "thezoraiz__ascii-image-converter.d05a757",
+   "delta_py_rust": 1.505,
+   "delta_py_ts": 7.957,
+   "scale_loc": 595.0,
+   "n_tests": 465,
+   "difficulty": 41.756
+  },
+  {
+   "task": "tomarrell__wrapcheck.c058da1",
+   "delta_py_rust": 0.417,
+   "delta_py_ts": 1.458,
+   "scale_loc": 301.0,
+   "n_tests": 480,
+   "difficulty": 17.917
+  },
+  {
+   "task": "tomnomnom__gron.88a6234",
+   "delta_py_rust": -66.518,
+   "delta_py_ts": -73.661,
+   "scale_loc": 346.0,
+   "n_tests": 224,
+   "difficulty": 61.235
+  },
+  {
+   "task": "trasta298__keifu.3331426",
+   "delta_py_rust": 13.359,
+   "delta_py_ts": 12.214,
+   "scale_loc": 424.0,
+   "n_tests": 262,
+   "difficulty": 52.672
+  },
+  {
+   "task": "tree-sitter__tree-sitter.5e23cca",
+   "delta_py_rust": 2.273,
+   "delta_py_ts": 2.435,
+   "scale_loc": 445.0,
+   "n_tests": 1232,
+   "difficulty": 28.828
+  },
+  {
+   "task": "tstack__lnav.ee34494",
+   "delta_py_rust": -1.616,
+   "delta_py_ts": -1.616,
+   "scale_loc": 441.0,
+   "n_tests": 990,
+   "difficulty": 8.872
+  },
+  {
+   "task": "tukaani-project__xz.1007bf0",
+   "delta_py_rust": 0.851,
+   "delta_py_ts": 8.581,
+   "scale_loc": 533.0,
+   "n_tests": 1410,
+   "difficulty": 30.083
+  },
+  {
+   "task": "typst__typst.88356d0",
+   "delta_py_rust": 3.712,
+   "delta_py_ts": 2.61,
+   "scale_loc": 490.0,
+   "n_tests": 1724,
+   "difficulty": 28.248
+  },
+  {
+   "task": "unhappychoice__gittype.34b72d0",
+   "delta_py_rust": 0.0,
+   "delta_py_ts": 0.675,
+   "scale_loc": 429.0,
+   "n_tests": 741,
+   "difficulty": 41.048
+  },
+  {
+   "task": "universal-ctags__ctags.243595e",
+   "delta_py_rust": 2.303,
+   "delta_py_ts": -0.797,
+   "scale_loc": 553.0,
+   "n_tests": 2258,
+   "difficulty": 7.898
+  },
+  {
+   "task": "wfxr__code-minimap.0ddeea5",
+   "delta_py_rust": -17.252,
+   "delta_py_ts": -9.904,
+   "scale_loc": 324.0,
+   "n_tests": 313,
+   "difficulty": 59.159
+  },
+  {
+   "task": "wfxr__csview.8ac4de0",
+   "delta_py_rust": -0.597,
+   "delta_py_ts": 13.134,
+   "scale_loc": 417.0,
+   "n_tests": 335,
+   "difficulty": 88.209
+  },
+  {
+   "task": "wgunderwood__tex-fmt.3f1aef6",
+   "delta_py_rust": 6.374,
+   "delta_py_ts": 26.593,
+   "scale_loc": 372.0,
+   "n_tests": 455,
+   "difficulty": 52.637
+  },
+  {
+   "task": "wintermute-cell__ngrrram.8ea13c3",
+   "delta_py_rust": 19.142,
+   "delta_py_ts": 23.432,
+   "scale_loc": 311.0,
+   "n_tests": 303,
+   "difficulty": 51.54
+  },
+  {
+   "task": "xampprocky__tokei.505d648",
+   "delta_py_rust": -7.65,
+   "delta_py_ts": -2.459,
+   "scale_loc": 287.0,
+   "n_tests": 732,
+   "difficulty": 52.709
+  },
+  {
+   "task": "xorg62__tty-clock.f2f847c",
+   "delta_py_rust": 15.658,
+   "delta_py_ts": -1.424,
+   "scale_loc": 322.0,
+   "n_tests": 281,
+   "difficulty": 60.854
+  },
+  {
+   "task": "y2z__monolith.8702e66",
+   "delta_py_rust": 2.104,
+   "delta_py_ts": 25.806,
+   "scale_loc": 398.0,
+   "n_tests": 713,
+   "difficulty": 40.393
+  },
+  {
+   "task": "yaa110__nomino.f892499",
+   "delta_py_rust": -4.473,
+   "delta_py_ts": -7.029,
+   "scale_loc": 383.0,
+   "n_tests": 313,
+   "difficulty": 59.159
+  },
+  {
+   "task": "yassinebridi__serpl.c48a9d7",
+   "delta_py_rust": 4.036,
+   "delta_py_ts": 6.278,
+   "scale_loc": 240.0,
+   "n_tests": 446,
+   "difficulty": 51.719
+  },
+  {
+   "task": "yoav-lavi__melody.f4af9b4",
+   "delta_py_rust": 8.465,
+   "delta_py_ts": 8.797,
+   "scale_loc": 417.0,
+   "n_tests": 1205,
+   "difficulty": 56.542
+  },
+  {
+   "task": "ys-l__flamelens.0b4dc33",
+   "delta_py_rust": -1.339,
+   "delta_py_ts": -6.25,
+   "scale_loc": 246.0,
+   "n_tests": 224,
+   "difficulty": 41.592
+  },
+  {
+   "task": "zevv__duc.a58fa4e",
+   "delta_py_rust": -4.348,
+   "delta_py_ts": -6.865,
+   "scale_loc": 436.0,
+   "n_tests": 874,
+   "difficulty": 57.609
+  },
+  {
+   "task": "zk-org__zk.10d93d5",
+   "delta_py_rust": -4.242,
+   "delta_py_ts": -9.476,
+   "scale_loc": 575.0,
+   "n_tests": 1108,
+   "difficulty": 20.758
+  }
+ ],
+ "scale_curves": {
+  "c": {
+   "Q1 small": 55.83,
+   "Q2": 51.01,
+   "Q3": 46.16,
+   "Q4 large": 36.68
+  },
+  "go": {
+   "Q1 small": 56.49,
+   "Q2": 55.31,
+   "Q3": 48.19,
+   "Q4 large": 40.35
+  },
+  "java": {
+   "Q1 small": 54.01,
+   "Q2": 52.58,
+   "Q3": 47.4,
+   "Q4 large": 38.05
+  },
+  "js": {
+   "Q1 small": 57.32,
+   "Q2": 55.85,
+   "Q3": 48.32,
+   "Q4 large": 39.04
+  },
+  "python": {
+   "Q1 small": 58.74,
+   "Q2": 56.7,
+   "Q3": 49.02,
+   "Q4 large": 42.75
+  },
+  "ruby": {
+   "Q1 small": 59.36,
+   "Q2": 55.19,
+   "Q3": 47.84,
+   "Q4 large": 39.71
+  },
+  "rust": {
+   "Q1 small": 60.18,
+   "Q2": 54.7,
+   "Q3": 49.32,
+   "Q4 large": 40.16
+  },
+  "ts": {
+   "Q1 small": 59.66,
+   "Q2": 57.12,
+   "Q3": 48.5,
+   "Q4 large": 40.32
+  }
+ }
+}
