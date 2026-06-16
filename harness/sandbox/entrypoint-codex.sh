@@ -66,6 +66,20 @@ if [[ -d "$ARM_DIR/skills" ]]; then
   echo "[entrypoint-codex] installed arm skills into $CODEX_SKILLS_DIR: $(ls "$CODEX_SKILLS_DIR" 2>/dev/null | tr '\n' ' ')"
 fi
 
+# Auto-load an arm's AGENTS.md through Codex's NATIVE instruction-file channel.
+# Codex 0.130.0 reads AGENTS.md from the agent's working root (= RUN_CWD, the
+# cwd we `cd` into below) even in a non-git dir under our exact flags
+# (--skip-git-repo-check --ignore-user-config --ignore-rules) - verified
+# empirically. So if an arm ships an AGENTS.md, drop it into RUN_CWD and Codex
+# loads it as persistent instructions ahead of the task - the faithful analog
+# of a CLAUDE.md, NOT a user-prompt prefix. This is how the codex-free-karpathy
+# arm injects the andrej-karpathy-skills CLAUDE.md as its single experimental
+# variable; its orchestration.md + setup.sh stay byte-identical to codex-free.
+if [[ -f "$ARM_DIR/AGENTS.md" ]]; then
+  cp "$ARM_DIR/AGENTS.md" "$RUN_CWD/AGENTS.md"
+  echo "[entrypoint-codex] installed arm AGENTS.md into agent cwd ($RUN_CWD)"
+fi
+
 # Combine the harness system prompt and the arm's orchestration into a single
 # "developer instructions" block. Codex CLI 0.130.0 has no
 # --append-system-prompt equivalent for `exec`, so we prepend the system

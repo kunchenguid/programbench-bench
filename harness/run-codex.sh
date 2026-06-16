@@ -153,11 +153,16 @@ if [[ "$PB_PILOT2" == "1" ]]; then
   }
   P2_KEEPLANG=""   # for mandated arms, the one language to keep; "" = free (keep all)
   case "$ARM" in
-    codex-free|codex-free-tdd)
+    codex-free|codex-free-tdd|codex-free-karpathy)
       # Free language choice (all toolchains). codex-free-tdd is codex-free +
       # the test-driven-development skill (shipped in arms/codex-free-tdd/skills/,
-      # installed into $CODEX_HOME/skills by entrypoint-codex.sh); its topology
-      # is identical to codex-free, so it shares this branch.
+      # installed into $CODEX_HOME/skills by entrypoint-codex.sh). codex-free-karpathy
+      # is codex-free + the andrej-karpathy-skills CLAUDE.md, delivered VERBATIM
+      # as arms/codex-free-karpathy/AGENTS.md - Codex's native instruction-file
+      # channel (entrypoint-codex.sh copies it into the agent cwd; auto-loaded
+      # ahead of the task). orchestration.md + setup.sh stay byte-identical to
+      # codex-free, so the AGENTS.md is the single variable. Both have a topology
+      # identical to codex-free, so they share this branch.
       p2_mount_vol pb-toolkit2 /opt/tk2
       for _l in rust go python js ts ruby java; do p2_mount_vol "pb-deps-${_l}" "/opt/deps/${_l}"; done
       ;;
