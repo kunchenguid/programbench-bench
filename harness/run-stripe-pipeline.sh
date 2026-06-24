@@ -36,7 +36,7 @@ set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN_NAME="${RUN_NAME:-codex-pilot-1}"
 STRIPE_SIZE="${STRIPE_SIZE:-20}"
-PARALLEL="${PARALLEL:-4}"
+PARALLEL="${PARALLEL:-2}"   # default 2 (2026-06-22; was 4) - parallel=4 exhausted the Codex rolling usage quota mid-run; 2 halves the token burn rate. Raise only with known quota headroom.
 WORKERS="${WORKERS:-4}"
 BRANCH_WORKERS="${BRANCH_WORKERS:-2}"
 BRANCH_RETRIES="${BRANCH_RETRIES:-1}"   # retries on a results_read_failed branch; set 0 to skip futile retries of hang/broken tasks

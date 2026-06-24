@@ -32,7 +32,7 @@ TASKS_RAW=""
 SLICE=""
 FILTER=""
 RUN_NAME="${PB_RUN_NAME:-default}"
-PARALLEL=4   # default agent concurrency (2026-05-26); REQUIRES `docker login` (200/6hr) to avoid 429 pull-cascade false-failures. Override with --parallel 1 for anonymous/quota-limited runs.
+PARALLEL=2   # default agent concurrency (2026-06-22; lowered from 4). parallel=4 exhausted the Codex gpt-5.5 ROLLING usage quota mid-run (capped after ~169/200 tasks) because 4 concurrent agents burn the window faster than it replenishes; parallel=2 halves the burn rate to stay under it. Still REQUIRES `docker login` (200/6hr) to avoid 429 pull-cascade false-failures. Override with --parallel 1 for anonymous runs, or --parallel 4 only when quota headroom is known-ample (ask first).
 BUDGET="${PB_BUDGET_USD:-50}"
 MODEL="${PB_MODEL:-}"   # empty → let per-arm runner pick its own default (claude-* defaults to claude-opus-4-7, codex-* defaults to gpt-5.5)
 KEEP_IMAGE_FLAG=""

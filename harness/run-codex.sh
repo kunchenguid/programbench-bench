@@ -153,16 +153,19 @@ if [[ "$PB_PILOT2" == "1" ]]; then
   }
   P2_KEEPLANG=""   # for mandated arms, the one language to keep; "" = free (keep all)
   case "$ARM" in
-    codex-free|codex-free-tdd|codex-free-karpathy)
+    codex-free|codex-free-tdd|codex-free-karpathy|codex-free-rtk)
       # Free language choice (all toolchains). codex-free-tdd is codex-free +
       # the test-driven-development skill (shipped in arms/codex-free-tdd/skills/,
       # installed into $CODEX_HOME/skills by entrypoint-codex.sh). codex-free-karpathy
       # is codex-free + the andrej-karpathy-skills CLAUDE.md, delivered VERBATIM
       # as arms/codex-free-karpathy/AGENTS.md - Codex's native instruction-file
       # channel (entrypoint-codex.sh copies it into the agent cwd; auto-loaded
-      # ahead of the task). orchestration.md + setup.sh stay byte-identical to
-      # codex-free, so the AGENTS.md is the single variable. Both have a topology
-      # identical to codex-free, so they share this branch.
+      # ahead of the task). codex-free-rtk is codex-free + the rtk (Rust Token
+      # Killer) CLI proxy: its AGENTS.md carries rtk's own instruction catalog and
+      # its orchestration.md adds the rtk mandate, while the offline rtk binary is
+      # installed into the cleanroom just below (see RTK_TGZ). All three keep a
+      # topology identical to codex-free, so they share this branch; setup.sh stays
+      # byte-identical across them and the instruction file is the single variable.
       p2_mount_vol pb-toolkit2 /opt/tk2
       for _l in rust go python js ts ruby java; do p2_mount_vol "pb-deps-${_l}" "/opt/deps/${_l}"; done
       ;;
@@ -190,6 +193,24 @@ if [[ "$PB_PILOT2" == "1" ]]; then
     docker cp "$SETUP" "$CLEANROOM:/opt/pb-setup.sh" >/dev/null
     docker exec "$CLEANROOM" bash /opt/pb-setup.sh > "$LOG_OUT/cleanroom-setup.log" 2>&1 \
       || { echo "[sandbox-codex] WARN: setup.sh returned non-zero (see cleanroom-setup.log)" >&2; }
+  fi
+
+  # rtk arm (codex-free-rtk): install the vendored offline rtk binary into the
+  # cleanroom so the agent can route its commands through it (token-compression
+  # study). rtk is a DEV-TIME tool only - it never enters submission.tar.gz nor
+  # the eval image, and compile.sh is unchanged, so this changes nothing at
+  # grading time. The musl static binary is vendored in the arm dir (cleanroom
+  # has --network none, so no download is possible). Gated on the tarball's
+  # presence, so it fires only for the rtk arm; setup.sh stays byte-identical to
+  # codex-free and this binary delivery is the sole topology delta.
+  RTK_TGZ="$REPO/arms/$ARM/rtk-x86_64-unknown-linux-musl.tar.gz"
+  if [[ -f "$RTK_TGZ" ]]; then
+    docker cp "$RTK_TGZ" "$CLEANROOM:/tmp/rtk.tar.gz" >/dev/null
+    if docker exec "$CLEANROOM" bash -lc 'tar -xzf /tmp/rtk.tar.gz -C /usr/local/bin rtk && chmod 755 /usr/local/bin/rtk && rm -f /tmp/rtk.tar.gz && rtk --version' >> "$LOG_OUT/cleanroom-setup.log" 2>&1; then
+      echo "[sandbox-codex] installed rtk into cleanroom (arm=$ARM)"
+    else
+      echo "[sandbox-codex] WARN: rtk install failed (see cleanroom-setup.log)" >&2
+    fi
   fi
 
   # Mandate integrity: neutralize the other native languages in the cleanroom
