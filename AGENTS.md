@@ -317,3 +317,10 @@ When a runaway task fills Docker.raw, the daemon wedges (`docker rmi`/`exec`/`ps
 - `runs/<run-name>/<arm>/<task>/<task>.eval.json` - per-task eval result (delete to force re-eval)
 - `logs/<run-name>/<arm>/<task>/transcript.jsonl` - per-task agent transcripts
 - `logs/<run-name>/_batch/<arm>__<task>.log` - per-task runner logs
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.
