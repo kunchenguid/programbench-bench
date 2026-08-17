@@ -71,8 +71,12 @@ This is a real, significant result, but it is narrow, and I do not want it over-
 - **Some of the cost is self-inflicted harness friction** (pytest-vs-unittest discovery, duplicated directories, probes hanging on interactive prompts). A cleaner setup would shave some spend - but not the core quality loss, which is the over-fit-and-stop dynamic.
 - **It is not a budget artifact.** Every TDD run finished normally and declared itself done with its own tests green. The problem is premature confidence from passing self-written tests, not running out of turns. More budget would not fix it.
 
+## Independent reproduction
+
+Will Hampson (@Whamp) reran the comparison with a different, behavior-focused TDD skill. The alternate TDD arm was still worse than the free-choice control and statistically indistinguishable from the original TDD arm. See `will-tdd-reproduction.md` for the table, paired tests, and data pointers.
+
 ## Dig in yourself
 
 The data sits next to this post under `data/`.
-`data/per-task.csv` has the per-task pass rate, cost, and turns for both arms (plus the eight language arms used to define difficulty), and `data/submissions/` has the code the agent actually wrote in each arm for every task - so you can read, side by side, the control implementation and the thinner test-first clone of the same tool.
+`data/per-task.csv` has the per-task pass rate, cost, and turns for the compared arms (plus the eight language arms used to define difficulty), and `data/submissions/` has the code the agent actually wrote in each arm for every task - so you can read, side by side, the control implementation and the thinner test-first clone of the same tool.
 `DATA.md` documents the columns, the n = 192 blocklist, and how to recompute every number here.
